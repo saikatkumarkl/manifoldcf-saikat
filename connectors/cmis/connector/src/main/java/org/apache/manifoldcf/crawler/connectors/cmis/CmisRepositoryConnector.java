@@ -209,10 +209,22 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
           parameters.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, endpoint+"/NavigationService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, endpoint+"/ObjectService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, endpoint+"/PolicyService?wsdl");
-          parameters.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, endpoint+"/RelationshipService?wsdl");
-          parameters.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, endpoint+"/RepositoryService?wsdl");
+          parameters.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, endpoint+"/RepositoryService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, endpoint+"/VersioningService?wsdl");
+        } else if(CmisConfig.BINDING_BROWSER_VALUE.equals(binding)){
+          //Browser (JSON) protocol - useful when server is behind HTTPS reverse proxy
+          parameters.put(SessionParameter.BROWSER_URL, endpoint);
+          parameters.put(SessionParameter.BINDING_TYPE, BindingType.BROWSER.value());
         }
+
+        // When protocol is HTTPS, install a custom HTTP invoker that rewrites
+        // http:// URLs (returned by some CMIS servers behind reverse proxies)
+        // back to https://.
+        if ("https".equalsIgnoreCase(protocol)) {
+          parameters.put(SessionParameter.HTTP_INVOKER_CLASS,
+              HttpsForceHttpInvoker.class.getName());
+        }
+
         // create session
         if (StringUtils.isEmpty(repositoryId)) {
 

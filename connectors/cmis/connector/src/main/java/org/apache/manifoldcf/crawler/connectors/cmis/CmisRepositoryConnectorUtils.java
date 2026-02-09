@@ -67,21 +67,67 @@ public class CmisRepositoryConnectorUtils {
             	
     		String link = null;
         try {
-            Method loadLink = AbstractAtomPubService.class.getDeclaredMethod(LOAD_LINK_METHOD_NAME,
+            // Use the actual class of the ObjectService instance to find the method,
+            // rather than the statically-resolved AbstractAtomPubService class.
+            // This avoids "object is not an instance of declaring class" errors
+            // when ManifoldCF's connector classloader is different from the parent classloader.
+            Object objectService = session.getBinding().getObjectService();
+            Method loadLink = findMethodInHierarchy(objectService.getClass(), LOAD_LINK_METHOD_NAME,
                     new Class[]{String.class, String.class, String.class, String.class});
 
-            loadLink.setAccessible(true);
-
-            link = (String) loadLink.invoke(session.getBinding().getObjectService(), session.getRepositoryInfo().getId(),
-                    document.getId(), AtomPubParser.LINK_REL_CONTENT, null);
+            if (loadLink != null) {
+                loadLink.setAccessible(true);
+                link = (String) loadLink.invoke(objectService, session.getRepositoryInfo().getId(),
+                        document.getId(), AtomPubParser.LINK_REL_CONTENT, null);
+            } else {
+                // Fallback: construct a content path from document properties
+                if (document.getParents() != null && !document.getParents().isEmpty()) {
+                    String path = document.getParents().get(0).getPath();
+                    String name = document.getName();
+                    link = path + SLASH + name;
+                } else {
+                    link = document.getName();
+                }
+                Logging.connectors.warn("CMIS: loadLink method not found on " + objectService.getClass().getName()
+                        + ", using fallback document path: " + link);
+            }
         } catch (Exception e) {
-            Logging.connectors.error(
-                    "CMIS: Error during getting the content stream url: "
+            // Fallback: use document path instead of failing entirely
+            Logging.connectors.warn(
+                    "CMIS: Error during getting the content stream url (using fallback): "
                     + e.getMessage(), e);
-            throw new ManifoldCFException(e.getMessage(), e);
+            try {
+                if (document.getParents() != null && !document.getParents().isEmpty()) {
+                    String path = document.getParents().get(0).getPath();
+                    String name = document.getName();
+                    link = path + SLASH + name;
+                } else {
+                    link = document.getName();
+                }
+            } catch (Exception fallbackEx) {
+                Logging.connectors.error("CMIS: Fallback also failed: " + fallbackEx.getMessage(), fallbackEx);
+                throw new ManifoldCFException(e.getMessage(), e);
+            }
         }
 
         return link;
+    }
+
+    /**
+     * Walk the class hierarchy to find a declared method by name and parameter types.
+     * This is necessary because the class may be loaded by a different classloader
+     * than expected (ManifoldCF connector classloader vs parent classloader).
+     */
+    private static Method findMethodInHierarchy(Class<?> clazz, String methodName, Class<?>[] paramTypes) {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredMethod(methodName, paramTypes);
+            } catch (NoSuchMethodException e) {
+                current = current.getSuperclass();
+            }
+        }
+        return null;
     }
 
     /**

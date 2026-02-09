@@ -71,6 +71,12 @@
       <artifactId>mcf-connector-common</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <!-- Apache Commons Lang (StringUtils needed by Velocity templates) -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
+    </dependency>
     <!-- Jetty JSP support (provides JettyJspServlet, not in Maven dep tree — was Ant-managed) -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -543,7 +549,7 @@
             <goals><goal>copy-dependencies</goal></goals>
             <configuration>
               <outputDirectory>${project.build.directory}/dist/lib</outputDirectory>
-              <includeGroupIds>org.eclipse.jetty,org.eclipse.jetty.toolchain,javax.servlet,org.mortbay.jetty,org.apache.tomcat,org.eclipse.jdt.core.compiler,org.hsqldb,org.postgresql,mysql,org.slf4j,org.apache.logging.log4j,com.googlecode.json-simple,org.apache.httpcomponents,commons-lang,commons-io,commons-codec,commons-el,commons-collections,commons-fileupload,commons-discovery,commons-logging,commons-exec,xalan,xerces,xml-apis,org.apache.velocity,com.google.code.gson,com.google.guava,net.java.dev.jna,com.sun.mail,javax.activation,org.apache.zookeeper</includeGroupIds>
+              <includeGroupIds>org.eclipse.jetty,org.eclipse.jetty.toolchain,javax.servlet,org.mortbay.jetty,org.apache.tomcat,org.eclipse.jdt.core.compiler,org.hsqldb,org.postgresql,mysql,org.slf4j,org.apache.logging.log4j,com.googlecode.json-simple,org.apache.httpcomponents,commons-lang,commons-io,commons-codec,commons-el,commons-collections,commons-fileupload,commons-discovery,commons-logging,commons-exec,xalan,xerces,xml-apis,org.apache.velocity,com.google.code.gson,com.google.guava,net.java.dev.jna,com.sun.mail,javax.activation,org.apache.zookeeper,org.apache.commons</includeGroupIds>
               <excludeTypes>war,pom</excludeTypes>
               <overWriteReleases>false</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
@@ -604,7 +610,8 @@
                 com.google.code.gson,com.google.guava,
                 net.java.dev.jna,
                 com.sun.mail,javax.activation,
-                org.apache.zookeeper
+                org.apache.zookeeper,
+                org.apache.commons
               </excludeGroupIds>
               <excludeTypes>war,pom</excludeTypes>
             </configuration>

@@ -63,5 +63,6 @@ public class CmisConfig {
   public static final String REPOSITORY_ID_DEFAULT_VALUE = StringUtils.EMPTY;
   public static final String BINDING_ATOM_VALUE = "atom";
   public static final String BINDING_WS_VALUE = "ws";
+  public static final String BINDING_BROWSER_VALUE = "browser";
   
 }
