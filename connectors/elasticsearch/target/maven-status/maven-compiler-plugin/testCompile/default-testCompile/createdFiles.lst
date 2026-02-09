@@ -1,0 +1,6 @@
+org/apache/manifoldcf/agents/output/elasticsearch/tests/NavigationHSQLDBUI.class
+org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseITHSQLDB.class
+org/apache/manifoldcf/agents/output/elasticsearch/tests/APISanityHSQLDBIT.class
+org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseHSQLDB.class
+org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseUIHSQLDB.class
+org/apache/manifoldcf/agents/output/elasticsearch/tests/BasePostgresql.class

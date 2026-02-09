@@ -1,0 +1,17 @@
+org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Authority$CheckThread.class
+org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Connector$GetSeedsThread.class
+org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Authority.class
+org/apache/manifoldcf/crawler/connectors/amazons3/ResponseException.class
+org/apache/manifoldcf/amazons3/S3Artifact.class
+org/apache/manifoldcf/crawler/connectors/amazons3/DocumentProcess.class
+org/apache/manifoldcf/amazons3/XThreadBuffer.class
+org/apache/manifoldcf/authorities/authorities/amazons3/ResponseException.class
+org/apache/manifoldcf/crawler/connectors/amazons3/GenericDocumentProcess.class
+org/apache/manifoldcf/authorities/authorities/amazons3/Messages.class
+org/apache/manifoldcf/crawler/connectors/amazons3/Messages.class
+org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Config.class
+org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3DocumentProcessUtility.class
+org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Config.class
+org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Connector.class
+org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Connector$CheckThread.class
+org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Authority$GrantsThread.class

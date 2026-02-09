@@ -1,0 +1,6 @@
+org/apache/manifoldcf/agents/output/mongodboutput/MongodbOutputConfig.class
+org/apache/manifoldcf/agents/output/mongodboutput/MongodbOutputConnector$DestroySessionThread.class
+org/apache/manifoldcf/agents/output/mongodboutput/MongodbOutputConnector.class
+org/apache/manifoldcf/agents/output/mongodboutput/MongodbOutputConnector$GetSessionThread.class
+org/apache/manifoldcf/agents/output/mongodboutput/Messages.class
+org/apache/manifoldcf/agents/output/mongodboutput/MongodbOutputConnector$CheckConnectionThread.class

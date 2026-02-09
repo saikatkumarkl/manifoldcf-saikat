@@ -1,0 +1,6 @@
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseITHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/BasePostgresql.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/NavigationHSQLDBUI.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseUIHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/BaseHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/test/java/org/apache/manifoldcf/agents/output/elasticsearch/tests/APISanityHSQLDBIT.java

@@ -1,0 +1,5 @@
+org/apache/manifoldcf/agents/output/amazoncloudsearch/AmazonCloudSearchConnector.class
+org/apache/manifoldcf/agents/output/amazoncloudsearch/DocumentChunkManager.class
+org/apache/manifoldcf/agents/output/amazoncloudsearch/AmazonCloudSearchConfig.class
+org/apache/manifoldcf/agents/output/amazoncloudsearch/DocumentRecord.class
+org/apache/manifoldcf/agents/output/amazoncloudsearch/Messages.class

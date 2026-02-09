@@ -1,0 +1,17 @@
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/JiraJSONResponse.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/Messages.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/JiraConfig.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraJSONResponse.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/JiraSession.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/JiraUserQueryResults.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraUserQueryResults.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/ResponseException.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraServerInfo.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/ResponseException.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraIssue.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/jira/JiraAuthorityConnector.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/Messages.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraQueryResults.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraSession.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraRepositoryConnector.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/jira/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/jira/JiraConfig.java

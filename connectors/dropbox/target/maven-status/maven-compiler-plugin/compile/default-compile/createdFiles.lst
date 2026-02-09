@@ -1,0 +1,8 @@
+org/apache/manifoldcf/crawler/connectors/dropbox/Messages.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxSession.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxRepositoryConnector$GetSeedsThread.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxRepositoryConnector.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxRepositoryConnector$BackgroundStreamThread.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxConfig.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxRepositoryConnector$GetObjectThread.class
+org/apache/manifoldcf/crawler/connectors/dropbox/DropboxRepositoryConnector$CheckConnectionThread.class

@@ -1,0 +1,10 @@
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxConnector$SpecPacker.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxDocument$IndexingFormat.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxClient.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxClient$ResponseCode.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxConfig.class
+org/apache/manifoldcf/agents/output/searchblox/Messages.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxDocument.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxDocument$DocumentAction.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxException.class
+org/apache/manifoldcf/agents/output/searchblox/SearchBloxConnector.class

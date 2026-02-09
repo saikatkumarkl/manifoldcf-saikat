@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <chmod perm="755" includes="*.sh" dir="/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/distribution/target/dist/example" />
+  </target>
+</project>

@@ -1,0 +1,11 @@
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConnector$CheckConnectionThread.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConnector$SendThread.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatCredentials.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatSession$ProxySettings.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/Messages.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatSession.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConnector.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConnector$ConnectThread.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConnector$CloseSessionThread.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatConfig.class
+org/apache/manifoldcf/crawler/notifications/rocketchat/RocketChatMessage.class

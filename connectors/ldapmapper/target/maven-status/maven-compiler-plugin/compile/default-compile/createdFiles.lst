@@ -1,0 +1,3 @@
+org/apache/manifoldcf/authorities/mappers/ldap/LDAPProtocolEnum.class
+org/apache/manifoldcf/authorities/mappers/ldap/LDAPMapper.class
+org/apache/manifoldcf/authorities/mappers/ldap/Messages.class

@@ -1,0 +1,6 @@
+org/apache/manifoldcf/authorities/mappers/regexp/Messages.class
+org/apache/manifoldcf/authorities/mappers/regexp/MatchMap$EvaluatorToken.class
+org/apache/manifoldcf/authorities/mappers/regexp/MatchMap$EvaluatorTokenStream.class
+org/apache/manifoldcf/authorities/mappers/regexp/MatchMap.class
+org/apache/manifoldcf/authorities/mappers/regexp/RegexpParameters.class
+org/apache/manifoldcf/authorities/mappers/regexp/RegexpMapper.class

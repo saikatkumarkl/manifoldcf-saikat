@@ -1,0 +1,8 @@
+org/apache/manifoldcf/agents/transformation/tika/TikaExtractor.class
+org/apache/manifoldcf/agents/transformation/tika/Messages.class
+org/apache/manifoldcf/agents/transformation/tika/TikaExtractor$FileDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/tika/TikaExtractor$MemoryDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/tika/TikaExtractor$SpecPacker.class
+org/apache/manifoldcf/agents/transformation/tika/TikaParser.class
+org/apache/manifoldcf/agents/transformation/tika/TikaConfig.class
+org/apache/manifoldcf/agents/transformation/tika/TikaExtractor$DestinationStorage.class

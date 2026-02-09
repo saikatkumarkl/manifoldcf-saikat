@@ -1,0 +1,10 @@
+org/apache/manifoldcf/crawler/notifications/slack/SlackSession$ProxySettings.class
+org/apache/manifoldcf/crawler/notifications/slack/Messages.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackMessage.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackSession.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConnector$CheckConnectionThread.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConnector$SendThread.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConnector$ConnectThread.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConnector.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConnector$CloseSessionThread.class
+org/apache/manifoldcf/crawler/notifications/slack/SlackConfig.class

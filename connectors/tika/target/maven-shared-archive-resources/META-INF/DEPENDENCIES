@@ -1,0 +1,639 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+ManifoldCF - Connectors - Tika Transformer
+
+
+From: 'an unknown organization'
+
+  - jcommander (https://jcommander.org) com.beust:jcommander:jar:1.82
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - parso (https://github.com/epam/parso) com.epam:parso:jar:2.0.14
+    License: Apache License v2  (http://www.apache.org/licenses/LICENSE-2.0.html)
+
+  - Java Unrar (https://github.com/junrar/junrar) com.github.junrar:junrar:jar:7.4.1
+    License: UnRar License  (https://github.com/junrar/junrar/LICENSE.md)
+
+  - Open JSON (https://github.com/openjson/openjson) com.github.openjson:openjson:jar:1.0.12
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - curvesapi (https://github.com/virtuald/curvesapi) com.github.virtuald:curvesapi:jar:1.06
+    License: BSD License  (http://opensource.org/licenses/BSD-3-Clause)
+
+  - Gson (https://github.com/google/gson/gson) com.google.code.gson:gson:jar:2.8.0
+    License: Apache 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Guava: Google Core Libraries for Java (https://github.com/google/guava/guava) com.google.guava:guava:bundle:21.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Protocol Buffers [Core] (https://developers.google.com/protocol-buffers/protobuf-java/) com.google.protobuf:protobuf-java:bundle:3.19.4
+    License: 3-Clause BSD License  (https://opensource.org/licenses/BSD-3-Clause)
+
+  - JSON.simple (http://code.google.com/p/json-simple/) com.googlecode.json-simple:json-simple:bundle:1.1.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - juniversalchardet (http://juniversalchardet.googlecode.com/) com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
+    License: Mozilla Public License 1.1 (MPL 1.1)  (http://www.mozilla.org/MPL/MPL-1.1.html)
+
+  - dd-plist (http://www.github.com/3breadt/dd-plist) com.googlecode.plist:dd-plist:jar:1.23
+    License: MIT License  (http://opensource.org/licenses/mit)
+
+  - c3p0 (https://github.com/swaldman/c3p0) com.mchange:c3p0:jar:0.9.5.5
+    License: GNU Lesser General Public License, Version 2.1  (http://www.gnu.org/licenses/lgpl-2.1.html)
+    License: Eclipse Public License, Version 1.0  (http://www.eclipse.org/org/documents/epl-v10.php)
+
+  - java-libpst (https://github.com/rjohnsondev/java-libpst) com.pff:java-libpst:jar:0.9.3
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - rome (http://rometools.com/rome) com.rometools:rome:jar:1.18.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - rome-utils (http://rometools.com/rome-utils) com.rometools:rome-utils:jar:1.18.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Boilerpipe -- Boilerplate Removal and Fulltext Extraction from HTML pages (http://code.google.com/p/boilerpipe/) de.l3s.boilerpipe:boilerpipe:jar:1.1.0
+    License: Apache License 2.0 
+
+  - SentimentAnalysisParser (https://github.com/USCDataScience/SentimentAnalysisParser) edu.usc.ir:sentiment-analysis-parser:jar:0.1
+    License: The Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/TomcatNative [BoringSSL - Static] (https://github.com/netty/netty-tcnative/netty-tcnative-boringssl-static/) io.netty:netty-tcnative-boringssl-static:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - JavaBeans(TM) Activation Framework (http://java.sun.com/javase/technologies/desktop/javabeans/jaf/index.jsp) javax.activation:activation:jar:1.1.1
+    License: COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0  (https://glassfish.dev.java.net/public/CDDLv1.0.html)
+
+  - Java Native Access (https://github.com/java-native-access/jna) net.java.dev.jna:jna:jar:5.10.0
+    License: LGPL-2.1-or-later  (https://www.gnu.org/licenses/old-licenses/lgpl-2.1)
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Java Native Access Platform (https://github.com/java-native-access/jna) net.java.dev.jna:jna-platform:jar:5.10.0
+    License: LGPL-2.1-or-later  (https://www.gnu.org/licenses/old-licenses/lgpl-2.1)
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - "Java Concurrency in Practice" book annotations (http://jcip.net/) net.jcip:jcip-annotations:jar:1.0
+
+  - axis  org.apache.axis:axis:jar:1.4
+
+  - axis-jaxrpc  org.apache.axis:axis-jaxrpc:jar:1.4
+
+  - Bouncy Castle S/MIME API (https://www.bouncycastle.org/java.html) org.bouncycastle:bcmail-jdk15on:jar:1.70
+    License: Bouncy Castle Licence  (https://www.bouncycastle.org/licence.html)
+
+  - Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs (https://www.bouncycastle.org/java.html) org.bouncycastle:bcpkix-jdk15on:jar:1.70
+    License: Bouncy Castle Licence  (https://www.bouncycastle.org/licence.html)
+
+  - Bouncy Castle Provider (https://www.bouncycastle.org/java.html) org.bouncycastle:bcprov-jdk15on:jar:1.70
+    License: Bouncy Castle Licence  (https://www.bouncycastle.org/licence.html)
+
+  - Bouncy Castle ASN.1 Extension and Utility APIs (https://www.bouncycastle.org/java.html) org.bouncycastle:bcutil-jdk15on:jar:1.70
+    License: Bouncy Castle Licence  (https://www.bouncycastle.org/licence.html)
+
+  - org.brotli:dec (http://brotli.org/dec) org.brotli:dec:jar:0.1.2
+    License: MIT License  (http://www.opensource.org/licenses/mit-license.php)
+
+  - TagSoup (http://home.ccil.org/~cowan/XML/tagsoup/) org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1
+    License: Apache License 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Castor (http://castor.org) org.codehaus.castor:castor:jar:1.0.5
+
+  - JHighlight (https://github.com/codelibs/jhighlight) org.codelibs:jhighlight:jar:1.0.3
+    License: CDDL, v1.0  (http://www.opensource.org/licenses/cddl1.php)
+    License: LGPL, v2.1 or later  (http://www.opensource.org/licenses/lgpl-license.php)
+
+  - Ogg and Vorbis for Java, Core (https://github.com/Gagravarr/VorbisJava) org.gagravarr:vorbis-java-core:jar:0.8
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Tika plugin for Ogg, Vorbis and FLAC (https://github.com/Gagravarr/VorbisJava) org.gagravarr:vorbis-java-tika:jar:0.8
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Itadaki jbzip2 (https://code.google.com/p/jbzip2/) org.itadaki:bzip2:jar:0.9.1
+    License: MIT License (MIT)  (http://opensource.org/licenses/mit-license.php)
+
+  - ISO Parser (https://github.com/tballison/mp4parser) org.tallison:isoparser:jar:1.9.41.7
+    License: Apache Software License - Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - JMatIO (https://github.com/tballison/jmatio) org.tallison:jmatio:jar:1.5
+    License: BSD  (http://www.linfo.org/bsdlicense.html)
+
+  - org.tallison:metadata-extractor (https://drewnoakes.com/code/exif/) org.tallison:metadata-extractor:jar:2.15.0.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - XMPCore Shaded (https://github.com/tballison) org.tallison.xmp:xmpcore-shaded:jar:6.1.11
+    License: BSD 3 Clause  (https://opensource.org/licenses/BSD-3-Clause)
+
+  - XZ for Java (https://tukaani.org/xz/java.html) org.tukaani:xz:jar:1.9
+    License: Public Domain 
+
+  - WSDL4J (http://sf.net/projects/wsdl4j) wsdl4j:wsdl4j:jar:1.6.2
+    License: CPL  (http://www.opensource.org/licenses/cpl1.0.txt)
+
+  - Xerces2-j (https://xerces.apache.org/xerces2-j/) xerces:xercesImpl:jar:2.12.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - XML Commons External Components XML APIs (http://xml.apache.org/commons/components/external/) xml-apis:xml-apis:jar:1.4.01
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+    License: The SAX License  (http://www.saxproject.org/copying.html)
+    License: The W3C License  (http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/java-binding.zip)
+
+
+From: 'Apache Software Foundation' (http://www.apache.org)
+
+  - JTA 1.1 (http://geronimo.apache.org/specs/geronimo-jta_1.1_spec) org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'Apache Software Foundation' (http://www.apache.org/)
+
+  - Apache POI (http://poi.apache.org/) org.apache.poi:poi:jar:4.1.2
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache POI (http://poi.apache.org/) org.apache.poi:poi-ooxml:jar:4.1.2
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache POI (http://poi.apache.org/) org.apache.poi:poi-ooxml-schemas:jar:4.1.2
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache POI (http://poi.apache.org/) org.apache.poi:poi-scratchpad:jar:4.1.2
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'com.mchange'
+
+  - mchange-commons-java (https://github.com/swaldman/mchange-commons-java) com.mchange:mchange-commons-java:jar:0.2.19
+    License: GNU Lesser General Public License, Version 2.1  (http://www.gnu.org/licenses/lgpl-2.1.html)
+    License: Eclipse Public License, Version 1.0  (http://www.eclipse.org/org/documents/epl-v10.html)
+
+
+From: 'Eclipse Foundation' (https://www.eclipse.org)
+
+  - Jakarta Activation (https://github.com/eclipse-ee4j/jaf/jakarta.activation) com.sun.activation:jakarta.activation:jar:1.2.2
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - istack common utility code runtime (https://projects.eclipse.org/projects/ee4j/istack-commons/istack-commons-runtime) com.sun.istack:istack-commons-runtime:jar:3.0.12
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - fastinfoset (https://projects.eclipse.org/projects/ee4j.jaxb-impl/FastInfoset) com.sun.xml.fastinfoset:FastInfoset:jar:1.2.16
+    License: Apache License, Version 2.0  (http://www.opensource.org/licenses/apache2.0.php)
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - xmlstreambuffer (https://github.com/eclipse-ee4j/metro-xmlstreambuffer) com.sun.xml.stream.buffer:streambuffer:jar:1.5.7
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - JAX-WS RI Runtime Bundle (https://projects.eclipse.org/projects/ee4j/jaxws-ri-bom/jaxws-ri-bom-ext/project/bundles/jaxws-rt) com.sun.xml.ws:jaxws-rt:pom:2.3.2
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - policy (https://github.com/eclipse-ee4j/metro-policy) com.sun.xml.ws:policy:jar:2.7.6
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - Jakarta Activation API jar (https://github.com/eclipse-ee4j/jaf/jakarta.activation-api) jakarta.activation:jakarta.activation-api:jar:1.2.2
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - Jakarta Annotations API (https://projects.eclipse.org/projects/ee4j.ca) jakarta.annotation:jakarta.annotation-api:jar:1.3.5
+    License: EPL 2.0  (http://www.eclipse.org/legal/epl-2.0)
+    License: GPL2 w/ CPE  (https://www.gnu.org/software/classpath/license.html)
+
+  - jakarta.jws API (https://github.com/eclipse-ee4j/jws-api) jakarta.jws:jakarta.jws-api:jar:1.1.1
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - Jakarta XML Binding API (https://github.com/eclipse-ee4j/jaxb-api/jakarta.xml.bind-api) jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - jakarta.xml.soap API (https://projects.eclipse.org/proposals/eclipse-project-jax-ws) jakarta.xml.soap:jakarta.xml.soap-api:jar:1.4.1
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - JAX-WS API (https://github.com/eclipse-ee4j/jax-ws-api) jakarta.xml.ws:jakarta.xml.ws-api:jar:2.3.2
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - management-api (https://github.com/eclipse-ee4j/orb-gmbal-commons) org.glassfish.external:management-api:jar:3.2.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - gmbal (https://projects.eclipse.org/projects/ee4j.orb) org.glassfish.gmbal:gmbal:bundle:4.0.0
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - GlassFish High Availability APIs and SPI (https://projects.eclipse.org/projects/ee4j/ha-api) org.glassfish.ha:ha-api:hk2-jar:3.1.12
+    License: EPL 2.0  (http://www.eclipse.org/legal/epl-2.0)
+    License: GPL2 w/ CPE  (https://www.gnu.org/software/classpath/license.html)
+
+  - JAXB Runtime (https://eclipse-ee4j.github.io/jaxb-ri/) org.glassfish.jaxb:jaxb-runtime:jar:2.3.5
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - TXW2 Runtime (https://eclipse-ee4j.github.io/jaxb-ri/) org.glassfish.jaxb:txw2:jar:2.3.5
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL ASM (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-asm) org.glassfish.pfl:pfl-asm:bundle:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL Basic (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-basic) org.glassfish.pfl:pfl-basic:jar:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL Basic Tools (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-basic-tools) org.glassfish.pfl:pfl-basic-tools:bundle:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL Dynamic (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-dynamic) org.glassfish.pfl:pfl-dynamic:jar:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL TF (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-tf) org.glassfish.pfl:pfl-tf:bundle:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - PFL TF TOOLS (https://github.com/eclipse-ee4j/orb-gmbal-pfl/pfl-tf-tools) org.glassfish.pfl:pfl-tf-tools:bundle:4.0.1
+    License: EDL 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - MIME streaming extension (https://github.com/eclipse-ee4j/metro-mimepull) org.jvnet.mimepull:mimepull:jar:1.9.11
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+  - Extended StAX API (https://projects.eclipse.org/projects/ee4j/stax-ex) org.jvnet.staxex:stax-ex:jar:1.8.1
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+
+From: 'Eclipse Foundation' (https://www.eclipse.org/org/foundation/)
+
+  - jakarta.ws.rs-api (https://github.com/eclipse-ee4j/jaxrs-api) jakarta.ws.rs:jakarta.ws.rs-api:bundle:2.1.6
+    License: EPL 2.0  (http://www.eclipse.org/legal/epl-2.0)
+    License: GPL2 w/ CPE  (https://www.gnu.org/software/classpath/license.html)
+
+
+From: 'FasterXML' (http://fasterxml.com)
+
+  - Woodstox (https://github.com/FasterXML/woodstox) com.fasterxml.woodstox:woodstox-core:bundle:6.2.8
+    License: The Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'FasterXML' (http://fasterxml.com/)
+
+  - Jackson-annotations (http://github.com/FasterXML/jackson) com.fasterxml.jackson.core:jackson-annotations:bundle:2.13.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Jackson-core (https://github.com/FasterXML/jackson-core) com.fasterxml.jackson.core:jackson-core:bundle:2.13.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - jackson-databind (http://github.com/FasterXML/jackson) com.fasterxml.jackson.core:jackson-databind:bundle:2.13.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'fasterxml.com' (http://fasterxml.com)
+
+  - Stax2 API (http://github.com/FasterXML/stax2-api) org.codehaus.woodstox:stax2-api:bundle:4.1
+    License: The BSD License  (http://www.opensource.org/licenses/bsd-license.php)
+
+
+From: 'GlassFish Community' (https://glassfish.dev.java.net)
+
+  - Java Servlet API (http://servlet-spec.java.net) javax.servlet:javax.servlet-api:jar:3.1.0
+    License: CDDL + GPLv2 with classpath exception  (https://glassfish.dev.java.net/nonav/public/CDDL+GPL.html)
+
+
+From: 'jai-imageio GitHub group' (https://github.com/jai-imageio/)
+
+  - Java Advanced Imaging Image I/O Tools API core (standalone) (https://github.com/jai-imageio/jai-imageio-core) com.github.jai-imageio:jai-imageio-core:bundle:1.4.0
+    License: BSD 3-clause License w/nuclear disclaimer  (LICENSE.txt)
+
+
+From: 'JDOM' (http://www.jdom.org)
+
+  - JDOM (http://www.jdom.org) org.jdom:jdom2:jar:2.0.6.1
+    License: Similar to Apache License but with the acknowledgment clause removed  (https://raw.github.com/hunterhacker/jdom/master/LICENSE.txt)
+
+
+From: 'Jean-Marie Dautelle, Werner Keil, V2COM' (http://unitsofmeasurement.github.io)
+
+  - Units of Measurement API (http://unitsofmeasurement.github.io/) javax.measure:unit-api:bundle:1.0
+    License: BSD  (LICENSE.txt)
+
+
+From: 'Joda.org' (http://www.joda.org)
+
+  - Joda time (http://joda-time.sourceforge.net) joda-time:joda-time:jar:2.2
+    License: Apache 2  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'Open Geospatial Consortium' (http://www.opengeospatial.org/)
+
+  - GeoAPI (http://www.geoapi.org/geoapi/) org.opengis:geoapi:bundle:3.0.1
+    License: OGC copyright  (https://raw.githubusercontent.com/opengeospatial/geoapi/master/LICENSE.txt)
+
+
+From: 'OpenHMS' (https://openhms.sourceforge.io/)
+
+  - Jackcess (https://jackcess.sourceforge.io) com.healthmarketscience.jackcess:jackcess:jar:4.0.1
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Jackcess Encrypt (http://jackcessencrypt.sf.net) com.healthmarketscience.jackcess:jackcess-encrypt:jar:4.0.1
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'Oracle' (http://www.oracle.com)
+
+  - JavaMail API (http://javaee.github.io/javamail/javax.mail) com.sun.mail:javax.mail:jar:1.6.2
+    License: CDDL/GPLv2+CE  (https://javaee.github.io/javamail/LICENSE)
+
+
+From: 'Oracle Corporation' (http://www.oracle.com/)
+
+  - saaj-impl (https://projects.eclipse.org/projects/ee4j/saaj-impl) com.sun.xml.messaging.saaj:saaj-impl:jar:1.5.1
+    License: Eclipse Distribution License - v 1.0  (http://www.eclipse.org/org/documents/edl-v10.php)
+
+
+From: 'OW2' (http://www.ow2.org/)
+
+  - asm (http://asm.ow2.io/) org.ow2.asm:asm:jar:9.2
+    License: BSD-3-Clause  (https://asm.ow2.io/license.html)
+
+
+From: 'QOS.ch' (http://www.qos.ch)
+
+  - Logback Classic Module (http://logback.qos.ch/logback-classic) ch.qos.logback:logback-classic:jar:1.2.10
+    License: Eclipse Public License - v 1.0  (http://www.eclipse.org/legal/epl-v10.html)
+    License: GNU Lesser General Public License  (http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
+
+  - Logback Core Module (http://logback.qos.ch/logback-core) ch.qos.logback:logback-core:jar:1.2.10
+    License: Eclipse Public License - v 1.0  (http://www.eclipse.org/legal/epl-v10.html)
+    License: GNU Lesser General Public License  (http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html)
+
+  - JCL 1.2 implemented over SLF4J (http://www.slf4j.org) org.slf4j:jcl-over-slf4j:jar:1.7.36
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - JUL to SLF4J bridge (http://www.slf4j.org) org.slf4j:jul-to-slf4j:jar:1.7.36
+    License: MIT License  (http://www.opensource.org/licenses/mit-license.php)
+
+
+From: 'Terracotta, Inc.' (http://www.terracotta.org)
+
+  - Ehcache Core (http://ehcache.org) net.sf.ehcache:ehcache-core:jar:2.6.2
+    License: The Apache Software License, Version 2.0  (src/assemble/EHCACHE-CORE-LICENSE.txt)
+
+  - quartz (http://www.quartz-scheduler.org/quartz) org.quartz-scheduler:quartz:jar:2.3.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'The Apache Software Foundation' (http://jakarta.apache.org)
+
+  - EL (http://jakarta.apache.org/commons/el/) commons-el:commons-el:jar:1.0
+    License: The Apache Software License, Version 2.0  (/LICENSE.txt)
+
+
+From: 'The Apache Software Foundation' (http://pdfbox.apache.org)
+
+  - Apache FontBox (http://pdfbox.apache.org/) org.apache.pdfbox:fontbox:bundle:2.0.25
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - PDFBox JBIG2 ImageIO plugin (https://www.apache.org/jbig2-imageio/) org.apache.pdfbox:jbig2-imageio:jar:3.0.3
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache JempBox (http://www.apache.org/pdfbox-parent/jempbox/) org.apache.pdfbox:jempbox:bundle:1.8.16
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache PDFBox (https://www.apache.org/pdfbox-parent/pdfbox/) org.apache.pdfbox:pdfbox:bundle:2.0.25
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache PDFBox tools (https://www.apache.org/pdfbox-parent/pdfbox-tools/) org.apache.pdfbox:pdfbox-tools:jar:2.0.25
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Preflight (https://www.apache.org/pdfbox-parent/preflight/) org.apache.pdfbox:preflight:bundle:2.0.25
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache XmpBox (https://www.apache.org/pdfbox-parent/xmpbox/) org.apache.pdfbox:xmpbox:bundle:2.0.25
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'The Apache Software Foundation' (http://www.apache.org)
+
+  - Apache Tika core (http://tika.apache.org/) org.apache.tika:tika-core:bundle:1.28.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Tika parsers (http://tika.apache.org/) org.apache.tika:tika-parsers:bundle:1.28.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+
+  - Commons Discovery (http://commons.apache.org/discovery/) commons-discovery:commons-discovery:jar:0.5
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Commons Lang (http://commons.apache.org/lang/) commons-lang:commons-lang:jar:2.6
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Logging (http://commons.apache.org/proper/commons-logging/) commons-logging:commons-logging:jar:1.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Exec (http://commons.apache.org/proper/commons-exec/) org.apache.commons:commons-exec:jar:1.3
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Math (http://commons.apache.org/proper/commons-math/) org.apache.commons:commons-math3:jar:3.6.1
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache HttpClient (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpclient:jar:4.5.13
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache HttpCore (http://hc.apache.org/httpcomponents-core-ga) org.apache.httpcomponents:httpcore:jar:4.4.13
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache HttpClient Mime (http://hc.apache.org/httpcomponents-client) org.apache.httpcomponents:httpmime:jar:4.5.13
+    License: Apache License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Santuario (http://santuario.apache.org/) org.apache.santuario:xmlsec:bundle:1.4.5
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - WSS4J (http://ws.apache.org/wss4j/) org.apache.ws.security:wss4j:bundle:1.5.12
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Xalan Java Serializer (http://xml.apache.org/xalan-j/) xalan:serializer:jar:2.7.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Xalan Java (http://xml.apache.org/xalan-j/) xalan:xalan:jar:2.7.1
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'The Apache Software Foundation' (https://www.apache.org/)
+
+  - Apache Commons Codec (http://commons.apache.org/proper/commons-codec/) commons-codec:commons-codec:jar:1.11
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons FileUpload (http://commons.apache.org/proper/commons-fileupload/) commons-fileupload:commons-fileupload:jar:1.3.3
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons IO (https://commons.apache.org/proper/commons-io/) commons-io:commons-io:jar:2.11.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Collections (https://commons.apache.org/proper/commons-collections/) org.apache.commons:commons-collections4:jar:4.4
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Compress (https://commons.apache.org/proper/commons-compress/) org.apache.commons:commons-compress:jar:1.21
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons CSV (https://commons.apache.org/proper/commons-csv/) org.apache.commons:commons-csv:jar:1.9.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Commons Lang (https://commons.apache.org/proper/commons-lang/) org.apache.commons:commons-lang3:jar:3.12.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache CXF Core (https://cxf.apache.org) org.apache.cxf:cxf-core:bundle:3.5.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache CXF Runtime JAX-RS Frontend (https://cxf.apache.org) org.apache.cxf:cxf-rt-frontend-jaxrs:bundle:3.5.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache CXF JAX-RS Client (https://cxf.apache.org) org.apache.cxf:cxf-rt-rs-client:bundle:3.5.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache CXF Runtime Security functionality (https://cxf.apache.org) org.apache.cxf:cxf-rt-security:bundle:3.5.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache CXF Runtime HTTP Transport (https://cxf.apache.org) org.apache.cxf:cxf-rt-transports-http:bundle:3.5.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache James :: Mime4j :: Core (http://james.apache.org/mime4j/apache-mime4j-core) org.apache.james:apache-mime4j-core:bundle:0.8.4
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache James :: Mime4j :: DOM (http://james.apache.org/mime4j/apache-mime4j-dom) org.apache.james:apache-mime4j-dom:bundle:0.8.4
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Log4j 1.x Compatibility API (https://logging.apache.org/log4j/2.x/log4j-1.2-api/) org.apache.logging.log4j:log4j-1.2-api:jar:2.17.2
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Log4j API (https://logging.apache.org/log4j/2.x/log4j-api/) org.apache.logging.log4j:log4j-api:jar:2.17.2
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Log4j Core (https://logging.apache.org/log4j/2.x/log4j-core/) org.apache.logging.log4j:log4j-core:jar:2.17.2
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - ManifoldCF - Framework - Agents (https://www.apache.org/mcf-parent/mcf-framework/mcf-agents/) org.apache.manifoldcf:mcf-agents:jar:2.30-SNAPSHOT
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - ManifoldCF - Connector - Common (https://www.apache.org/mcf-parent/mcf-framework/mcf-connector-common/) org.apache.manifoldcf:mcf-connector-common:jar:2.30-SNAPSHOT
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - ManifoldCF - Framework - Core (https://www.apache.org/mcf-parent/mcf-framework/mcf-core/) org.apache.manifoldcf:mcf-core:jar:2.30-SNAPSHOT
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - ManifoldCF - Framework - UI Core (https://www.apache.org/mcf-parent/mcf-framework/mcf-ui-core/) org.apache.manifoldcf:mcf-ui-core:jar:2.30-SNAPSHOT
+    License: Apache-2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache OpenNLP Tools (https://www.apache.org/opennlp/opennlp-tools/) org.apache.opennlp:opennlp-tools:bundle:1.9.4
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS features (http://sis.apache.org/core/sis-feature) org.apache.sis.core:sis-feature:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS metadata (http://sis.apache.org/core/sis-metadata) org.apache.sis.core:sis-metadata:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS referencing (http://sis.apache.org/core/sis-referencing) org.apache.sis.core:sis-referencing:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS utilities (http://sis.apache.org/core/sis-utility) org.apache.sis.core:sis-utility:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS netCDF storage (http://sis.apache.org/storage/sis-netcdf) org.apache.sis.storage:sis-netcdf:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache SIS common storage (http://sis.apache.org/storage/sis-storage) org.apache.sis.storage:sis-storage:jar:1.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Velocity - Engine (http://velocity.apache.org/engine/devel/velocity-engine-core/) org.apache.velocity:velocity-engine-core:jar:2.3
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - XmlSchema Core (https://ws.apache.org/commons/xmlschema20/xmlschema-core/) org.apache.ws.xmlschema:xmlschema-core:bundle:2.3.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache Yetus - Audience Annotations (https://yetus.apache.org/audience-annotations) org.apache.yetus:audience-annotations:jar:0.12.0
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache ZooKeeper - Server (http://zookeeper.apache.org/zookeeper) org.apache.zookeeper:zookeeper:jar:3.9.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Apache ZooKeeper - Jute (http://zookeeper.apache.org/zookeeper-jute) org.apache.zookeeper:zookeeper-jute:jar:3.9.1
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'The Netty Project' (https://netty.io/)
+
+  - Netty/Buffer (https://netty.io/netty-buffer/) io.netty:netty-buffer:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Codec (https://netty.io/netty-codec/) io.netty:netty-codec:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Common (https://netty.io/netty-common/) io.netty:netty-common:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Handler (https://netty.io/netty-handler/) io.netty:netty-handler:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Resolver (https://netty.io/netty-resolver/) io.netty:netty-resolver:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/TomcatNative [OpenSSL - Classes] (https://github.com/netty/netty-tcnative/netty-tcnative-classes/) io.netty:netty-tcnative-classes:jar:2.0.61.Final
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+  - Netty/Transport (https://netty.io/netty-transport/) io.netty:netty-transport:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Transport/Classes/Epoll (https://netty.io/netty-transport-classes-epoll/) io.netty:netty-transport-classes-epoll:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Transport/Native/Epoll (https://netty.io/netty-transport-native-epoll/) io.netty:netty-transport-native-epoll:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+  - Netty/Transport/Native/Unix/Common (https://netty.io/netty-transport-native-unix-common/) io.netty:netty-transport-native-unix-common:jar:4.1.94.Final
+    License: Apache License, Version 2.0  (https://www.apache.org/licenses/LICENSE-2.0)
+
+
+From: 'UCAR/Unidata' (http://www.unidata.ucar.edu/)
+
+  - CDM core library (http://www.unidata.ucar.edu/software/netcdf-java/documentation.htm) edu.ucar:cdm:jar:4.5.5
+    License: (MIT-style) netCDF C library license  (http://www.unidata.ucar.edu/software/netcdf/copyright.html)
+
+  - GRIB IOSP and Feature Collection (http://www.unidata.ucar.edu/software/netcdf-java/) edu.ucar:grib:jar:4.5.5
+    License: (MIT-style) netCDF C library license  (http://www.unidata.ucar.edu/software/netcdf/copyright.html)
+
+  - HttpClient Wrappers (http://www.unidata.ucar.edu/software/netcdf-java/documentation.htm) edu.ucar:httpservices:jar:4.5.5
+    License: (MIT-style) netCDF C library license  (http://www.unidata.ucar.edu/software/netcdf/copyright.html)
+
+  - netCDF-4 IOSP JNI connection to C library (http://www.unidata.ucar.edu/software/netcdf-java/netcdf4/) edu.ucar:netcdf4:jar:4.5.5
+    License: (MIT-style) netCDF C library license  (http://www.unidata.ucar.edu/software/netcdf/copyright.html)
+
+  - udunits (http://www.unidata.ucar.edu/software/udunits//) edu.ucar:udunits:jar:4.5.5
+    License: (MIT-style) netCDF C library license  (http://www.unidata.ucar.edu/software/netcdf/copyright.html)
+
+
+From: 'XmlBeans' (https://xmlbeans.apache.org/)
+
+  - XmlBeans (https://xmlbeans.apache.org/) org.apache.xmlbeans:xmlbeans:jar:3.1.0
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'Zaxxer.com' (https://github.com/brettwooldridge)
+
+  - HikariCP (https://github.com/brettwooldridge/HikariCP) com.zaxxer:HikariCP-java7:bundle:2.4.13
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+From: 'Zaxxer.com' (https://github.com/brettwooldridge/SparseBitSet)
+
+  - SparseBitSet (https://github.com/brettwooldridge/SparseBitSet) com.zaxxer:SparseBitSet:jar:1.2
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+
+

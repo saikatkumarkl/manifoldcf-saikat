@@ -1,0 +1,4 @@
+org/apache/manifoldcf/agents/output/kafka/Messages.class
+org/apache/manifoldcf/agents/output/kafka/KafkaOutputConnector.class
+org/apache/manifoldcf/agents/output/kafka/KafkaConfig.class
+org/apache/manifoldcf/agents/output/kafka/KafkaMessage.class

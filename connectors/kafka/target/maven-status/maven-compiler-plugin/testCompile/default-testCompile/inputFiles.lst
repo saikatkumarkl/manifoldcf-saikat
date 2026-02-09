@@ -1,0 +1,9 @@
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/BaseITHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/KafkaConnectorTest.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/BasePostgresql.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/ZooKeeperLocal.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/BaseHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/NavigationHSQLDBUI.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/APISanityHSQLDBIT.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/BaseUIHSQLDB.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/kafka/connector/src/test/java/org/apache/manifoldcf/agents/output/kafka/KafkaLocal.java

@@ -1,0 +1,10 @@
+org/apache/manifoldcf/agents/output/kafka/NavigationHSQLDBUI.class
+org/apache/manifoldcf/agents/output/kafka/KafkaConnectorTest.class
+org/apache/manifoldcf/agents/output/kafka/KafkaLocal.class
+org/apache/manifoldcf/agents/output/kafka/BaseHSQLDB.class
+org/apache/manifoldcf/agents/output/kafka/BaseITHSQLDB.class
+org/apache/manifoldcf/agents/output/kafka/ZooKeeperLocal$1.class
+org/apache/manifoldcf/agents/output/kafka/APISanityHSQLDBIT.class
+org/apache/manifoldcf/agents/output/kafka/ZooKeeperLocal.class
+org/apache/manifoldcf/agents/output/kafka/BasePostgresql.class
+org/apache/manifoldcf/agents/output/kafka/BaseUIHSQLDB.class

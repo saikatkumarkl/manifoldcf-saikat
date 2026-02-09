@@ -1,0 +1,13 @@
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3DocumentProcessUtility.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Config.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Config.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/ResponseException.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/DocumentProcess.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/amazons3/XThreadBuffer.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/amazons3/AmazonS3Authority.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/AmazonS3Connector.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/GenericDocumentProcess.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/amazons3/S3Artifact.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/crawler/connectors/amazons3/Messages.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/amazons3/Messages.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/amazons3/connector/src/main/java/org/apache/manifoldcf/authorities/authorities/amazons3/ResponseException.java

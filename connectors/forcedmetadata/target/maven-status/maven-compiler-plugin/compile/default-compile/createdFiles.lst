@@ -1,0 +1,7 @@
+org/apache/manifoldcf/agents/transformation/forcedmetadata/FieldSource.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/StringSource.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/ForcedMetadataConnector.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/FieldDataFactory.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/Messages.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/ForcedMetadataConnector$SpecPacker.class
+org/apache/manifoldcf/agents/transformation/forcedmetadata/IDataSource.class

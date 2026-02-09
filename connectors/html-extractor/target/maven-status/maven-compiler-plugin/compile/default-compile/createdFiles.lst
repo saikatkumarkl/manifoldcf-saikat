@@ -1,0 +1,10 @@
+org/apache/manifoldcf/agents/transformation/htmlextractor/JsoupProcessing.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractor$FileDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractorConfig.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractor$MemoryDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractor.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/Messages.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/exception/HtmlExtractorException.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractor$SpecPacker.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/exception/RegexException.class
+org/apache/manifoldcf/agents/transformation/htmlextractor/HtmlExtractor$DestinationStorage.class

@@ -1,0 +1,10 @@
+# Exclude Ant-built distribution and other large/unnecessary files from Docker context
+dist/
+build/
+lib/
+lib-proprietary/
+lib-license/
+site/
+*.tar.gz
+*.zip
+.git

@@ -1,0 +1,9 @@
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractorConfig.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$MemoryDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$MetadataAccumulator.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$SpecPacker.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$DestinationStorage.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$FileFilter.class
+org/apache/manifoldcf/agents/transformation/opennlp/OpenNlpExtractor$FileDestinationStorage.class
+org/apache/manifoldcf/agents/transformation/opennlp/Messages.class

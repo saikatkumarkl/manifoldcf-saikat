@@ -1,0 +1,9 @@
+org/apache/manifoldcf/agents/output/mongodboutput/tests/SanityPostgresqlTest.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/BaseITSanityTestUtils.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/APISanityHSQLDBIT.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/BasePostgresql.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/BaseHSQLDB.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/NavigationHSQLDBUI.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/SanityHSQLDBTest.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/BaseUIHSQLDB.class
+org/apache/manifoldcf/agents/output/mongodboutput/tests/BaseITHSQLDB.class

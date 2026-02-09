@@ -1,0 +1,10 @@
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$GetSeedsThread.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$DocumentReadingThread.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$CheckConnectionThread.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveSession.class
+org/apache/manifoldcf/crawler/connectors/googledrive/Messages.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$GetChildrenThread.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveConfig.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$GetObjectThread.class
+org/apache/manifoldcf/crawler/connectors/googledrive/GoogleDriveRepositoryConnector$GetSessionThread.class

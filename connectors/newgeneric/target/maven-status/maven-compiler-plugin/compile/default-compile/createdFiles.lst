@@ -1,0 +1,8 @@
+org/apache/manifoldcf/authorities/authorities/newgeneric/NewGenericAuthority.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/NewGenericConfig.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/api/NewGenericResponse.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/Messages.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/NewGenericAuthority$PreemptiveAuth.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/NewGenericAuthority$CheckThread.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/api/NewGenericUser.class
+org/apache/manifoldcf/authorities/authorities/newgeneric/NewGenericAuthority$GenericAuthorizationResponseDescription.class
