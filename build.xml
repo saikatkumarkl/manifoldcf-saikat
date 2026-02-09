@@ -921,7 +921,7 @@ Use Apache Forrest version forrest-0.9-dev or higher.
     </target>
     
     <target name="download-via-nuxeo" depends="setup-nuxeo-url">
-        <get src="${nuxeo-base-url}/${project-path}/${artifact-name}/${artifact-version}/${artifact-name}-${artifact-version}.${artifact-type}" dest="${target}/${artifact-name}-${artifact-version}.${artifact-type}"/>
+        <get src="${nuxeo-base-url}/${project-path}/${artifact-name}/${artifact-version}/${artifact-name}-${artifact-version}.${artifact-type}" dest="${target}/${artifact-name}-${artifact-version}.${artifact-type}" ignoreerrors="true"/>
     </target>
 
     <target name="download-nuxeo-client" depends="download-okhttp">
