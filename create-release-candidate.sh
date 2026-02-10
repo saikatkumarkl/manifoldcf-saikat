@@ -33,23 +33,11 @@ git checkout release-$branchTag
 #Update all the Maven modules with the new version
 mvn versions:set -DnewVersion=$mcfVersion -DremoveSnapshot -DgenerateBackupPoms=false
 
-#Update Ant script with the new RC version
-sed -i -e 's/"$mcfVersion"-dev/"$mcfVersion"/g' build.xml;
-
 #Update CHANGES.txt
 sed -i -e 's/"$mcfVersion"-dev/Release "$mcfVersion"/g' CHANGES.txt;
 
-#Ant Build
-ant make-core-deps make-deps image
-
-#Maven Build
-mvn clean install -B -DskipTests -DskipITs
-
-#Update MCF version in the properties.xml files
-sed -i -e 's/"$mcfVersion"-dev/"$mcfVersion"/g' dist/example/properties.xml;
-sed -i -e 's/"$mcfVersion"-dev/"$mcfVersion"/g' dist/example-proprietary/properties.xml;
-sed -i -e 's/"$mcfVersion"-dev/"$mcfVersion"/g' dist/multiprocess-file-example/properties.xml;
-sed -i -e 's/"$mcfVersion"-dev/"$mcfVersion"/g' dist/multiprocess-file-example-proprietary/properties.xml;
+#Maven Build (includes distribution assembly)
+mvn clean install -B -DskipTests -DskipITs -Drat.skip -pl distribution -am
 
 #RAT licence checks
 mvn -pl . apache-rat:check
@@ -60,7 +48,7 @@ cat target/rat.txt || true
 
 #Commit and Push
 find . -name 'pom.xml' -exec git add {} \;
-git add CHANGES.txt build.xml
+git add CHANGES.txt
 git commit -am "Create $releasecandidatetag tag for MCF $mcfVersion"
 git push
 

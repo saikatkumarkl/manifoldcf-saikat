@@ -1,10 +1,14 @@
-# Exclude Ant-built distribution and other large/unnecessary files from Docker context
-dist/
-build/
-lib/
-lib-proprietary/
-lib-license/
+# Exclude unnecessary files from Docker context
+# (only distribution/target/dist/ is needed by Dockerfile.maven)
 site/
+test-materials/
 *.tar.gz
 *.zip
 .git
+.github
+.idea
+*.iml
+
+# Exclude all target dirs except distribution/target/dist
+connectors/*/target/
+framework/**/target/

@@ -3,13 +3,16 @@
 /.idea/
 
 *.iml
-/build/
-/lib/
-/dist/
-lib-proprietary/*.jar
-site/fonts/
-/.DS_Store
 *.class
+
+# Maven build output
+target/
 /connectors/*/target/classes
 /connectors/*/target/generated-sources
 /connectors/*/target/test-classes
+
+# OS files
+/.DS_Store
+
+# Site fonts
+site/fonts/
