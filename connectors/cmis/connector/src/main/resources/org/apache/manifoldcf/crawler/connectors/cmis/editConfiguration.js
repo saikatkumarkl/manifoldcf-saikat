@@ -17,6 +17,56 @@
 
 <script type="text/javascript">
 <!--
+// Vendor-specific default API URL paths for group/user sync
+var vendorApiDefaults = {
+  "alfresco": {
+    groupApiUrl: "/alfresco/api/-default-/public/alfresco/versions/1/groups",
+    groupMembersApiUrl: "/alfresco/api/-default-/public/alfresco/versions/1/groups/{groupId}/members"
+  },
+  "sharepoint": {
+    groupApiUrl: "/_api/web/sitegroups",
+    groupMembersApiUrl: "/_api/web/sitegroups({groupId})/users"
+  },
+  "filenet": {
+    groupApiUrl: "/P8CE/rest/v1/groups",
+    groupMembersApiUrl: "/P8CE/rest/v1/groups/{groupId}/members"
+  },
+  "opentext": {
+    groupApiUrl: "/dctm-rest/repositories/default/groups",
+    groupMembersApiUrl: "/dctm-rest/repositories/default/groups/{groupId}/members"
+  },
+  "nuxeo": {
+    groupApiUrl: "/nuxeo/api/v1/directory/groupDirectory",
+    groupMembersApiUrl: "/nuxeo/api/v1/group/{groupId}"
+  },
+  "hptrim": {
+    groupApiUrl: "",
+    groupMembersApiUrl: ""
+  },
+  "other": {
+    groupApiUrl: "",
+    groupMembersApiUrl: ""
+  }
+};
+
+function onVendorChange()
+{
+  var vendor = editconnection.cmisVendor.value;
+  var defaults = vendorApiDefaults[vendor];
+  if (defaults)
+  {
+    editconnection.groupApiUrl.value = defaults.groupApiUrl;
+    editconnection.groupMembersApiUrl.value = defaults.groupMembersApiUrl;
+  }
+}
+
+function testGroupApi()
+{
+  // Set the test trigger and submit form to stay on the Server tab
+  document.getElementById("_testGroupApi").value = "true";
+  SelectTab("$Encoder.bodyJavascriptEscape($ResourceBundle.getString('CmisRepositoryConnector.Server'))");
+}
+
 function checkConfig()
 {
   return true;

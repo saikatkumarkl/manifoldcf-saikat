@@ -64,5 +64,22 @@ public class CmisConfig {
   public static final String BINDING_ATOM_VALUE = "atom";
   public static final String BINDING_WS_VALUE = "ws";
   public static final String BINDING_BROWSER_VALUE = "browser";
+
+  /** CMIS Vendor selection */
+  public static final String VENDOR_PARAM = "cmisVendor";
+
+  /** Group List API URL path (relative to protocol://server:port) */
+  public static final String GROUP_API_URL_PARAM = "groupApiUrl";
+
+  /** Group Members API URL path template (use {groupId} as placeholder) */
+  public static final String GROUP_MEMBERS_API_URL_PARAM = "groupMembersApiUrl";
+
+  /** Transient test result parameter (not persisted meaningfully) */
+  public static final String GROUP_API_TEST_RESULT_PARAM = "groupApiTestResult";
+
+  // Default values for new params
+  public static final String VENDOR_DEFAULT_VALUE = "other";
+  public static final String GROUP_API_URL_DEFAULT_VALUE = "";
+  public static final String GROUP_MEMBERS_API_URL_DEFAULT_VALUE = "";
   
 }

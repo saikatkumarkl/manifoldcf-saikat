@@ -1,0 +1,30 @@
+{
+  "job": {
+    "_children_": [
+      {"_type_": "description", "_value_": "CMIS IN_TREE Crawl to OpenSearch"},
+      {"_type_": "repository_connection", "_value_": "Alfresco CMIS"},
+      {
+        "_type_": "document_specification",
+        "_children_": [
+          {
+            "_type_": "startpoint",
+            "_attribute_cmisQuery": "SELECT * FROM cmis:document WHERE IN_TREE ('workspace://SpacesStore/1c199659-688f-4b52-9996-59688f4b5263')",
+            "_value_": ""
+          }
+        ]
+      },
+      {
+        "_type_": "pipelinestage",
+        "_children_": [
+          {"_type_": "stage_id", "_value_": "0"},
+          {"_type_": "stage_isoutput", "_value_": "true"},
+          {"_type_": "stage_connectionname", "_value_": "OpenSearch"}
+        ]
+      },
+      {"_type_": "start_mode", "_value_": "manual"},
+      {"_type_": "run_mode", "_value_": "scan once"},
+      {"_type_": "hopcount_mode", "_value_": "accurate"},
+      {"_type_": "priority", "_value_": "5"}
+    ]
+  }
+}

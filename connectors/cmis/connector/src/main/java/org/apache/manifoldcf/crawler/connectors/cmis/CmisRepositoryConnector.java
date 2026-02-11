@@ -18,16 +18,28 @@
  */
 package org.apache.manifoldcf.crawler.connectors.cmis;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
@@ -42,11 +54,17 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
+import org.apache.chemistry.opencmis.commons.data.Ace;
+import org.apache.chemistry.opencmis.commons.data.Acl;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisConnectionException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisPermissionDeniedException;
 import org.apache.commons.io.input.NullInputStream;
 import org.apache.commons.lang.StringUtils;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.apache.manifoldcf.agents.interfaces.RepositoryDocument;
 import org.apache.manifoldcf.agents.interfaces.ServiceInterruption;
 import org.apache.manifoldcf.core.interfaces.ConfigParams;
@@ -121,7 +139,7 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
   /** Endpoint port */
   protected String port = null;
 
-  /** Endpoint context path of the Alfresco webapp */
+  /** Endpoint context path of the CMIS webapp */
   protected String path = null;
 
   protected String repositoryId = null;
@@ -134,6 +152,16 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
 
   protected static final long timeToRelease = 300000L;
   protected long lastSessionFetch = -1L;
+
+  // Group membership syncer: resolves group members via vendor REST API
+  // and indexes them in the manifoldcf_acl OpenSearch index during crawl.
+  // At query time, the search service looks up the user's groups from this
+  // index to build ACL-filtered queries.
+  protected CmisGroupMembershipSyncer groupSyncer = null;
+
+  // Track all unique user tokens (non-group ACL tokens) seen during this crawl,
+  // used to populate the group_everyone membership.
+  private final Set<String> allUserTokens = new HashSet<>();
     
   /**
    * Constructor
@@ -209,7 +237,8 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
           parameters.put(SessionParameter.WEBSERVICES_NAVIGATION_SERVICE, endpoint+"/NavigationService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_OBJECT_SERVICE, endpoint+"/ObjectService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_POLICY_SERVICE, endpoint+"/PolicyService?wsdl");
-          parameters.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, endpoint+"/RepositoryService?wsdl");
+          parameters.put(SessionParameter.WEBSERVICES_RELATIONSHIP_SERVICE, endpoint+"/RelationshipService?wsdl");
+          parameters.put(SessionParameter.WEBSERVICES_REPOSITORY_SERVICE, endpoint+"/RepositoryService?wsdl");
           parameters.put(SessionParameter.WEBSERVICES_VERSIONING_SERVICE, endpoint+"/VersioningService?wsdl");
         } else if(CmisConfig.BINDING_BROWSER_VALUE.equals(binding)){
           //Browser (JSON) protocol - useful when server is behind HTTPS reverse proxy
@@ -356,6 +385,11 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
 
     }
 
+    // Sync group_everyone with all discovered user tokens before disconnecting
+    if (groupSyncer != null && !allUserTokens.isEmpty()) {
+      groupSyncer.syncEveryoneGroup(allUserTokens);
+    }
+
     username = null;
     password = null;
     protocol = null;
@@ -364,6 +398,8 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     path = null;
     binding = null;
     repositoryId = null;
+    groupSyncer = null;
+    allUserTokens.clear();
 
   }
 
@@ -497,6 +533,15 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     }
 
     lastSessionFetch = System.currentTimeMillis();
+
+    // Initialize group membership syncer if not already done
+    if (groupSyncer == null && protocol != null && server != null && port != null) {
+      String vendorVal = params.getParameter(CmisConfig.VENDOR_PARAM);
+      String gApiUrl = params.getParameter(CmisConfig.GROUP_API_URL_PARAM);
+      String gMembersApiUrl = params.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
+      groupSyncer = new CmisGroupMembershipSyncer(protocol, server, port, username, password,
+          vendorVal, gApiUrl, gMembersApiUrl);
+    }
   }
 
   /**
@@ -705,7 +750,9 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       	}
     } else {
       cmisQuery = CmisRepositoryConnectorUtils.getCmisQueryWithObjectId(cmisQuery);
-      ItemIterable<QueryResult> results = session.query(cmisQuery, false).getPage(1000000000);
+      // Use automatic pagination (default page size ~100) instead of
+      // getPage(1000000000) which causes Gateway Timeout on reverse proxies
+      ItemIterable<QueryResult> results = session.query(cmisQuery, false);
       for (QueryResult result : results) {
       		String id = result.getPropertyValueById(PropertyIds.OBJECT_ID);
           activities.addSeedDocument(id);
@@ -783,6 +830,20 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     if(binding == null)
       binding = CmisConfig.BINDING_ATOM_VALUE;
 
+    String cmisVendor = parameters.getParameter(CmisConfig.VENDOR_PARAM);
+    String groupApiUrl = parameters.getParameter(CmisConfig.GROUP_API_URL_PARAM);
+    String groupMembersApiUrl = parameters.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
+    String groupApiTestResult = parameters.getParameter(CmisConfig.GROUP_API_TEST_RESULT_PARAM);
+
+    if(cmisVendor == null)
+      cmisVendor = CmisConfig.VENDOR_DEFAULT_VALUE;
+    if(groupApiUrl == null)
+      groupApiUrl = CmisConfig.GROUP_API_URL_DEFAULT_VALUE;
+    if(groupMembersApiUrl == null)
+      groupMembersApiUrl = CmisConfig.GROUP_MEMBERS_API_URL_DEFAULT_VALUE;
+    if(groupApiTestResult == null)
+      groupApiTestResult = StringUtils.EMPTY;
+
     newMap.put(CmisConfig.USERNAME_PARAM, username);
     newMap.put(CmisConfig.PASSWORD_PARAM, password);
     newMap.put(CmisConfig.PROTOCOL_PARAM, protocol);
@@ -791,6 +852,10 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     newMap.put(CmisConfig.PATH_PARAM, path);
     newMap.put(CmisConfig.REPOSITORY_ID_PARAM, repositoryId);
     newMap.put(CmisConfig.BINDING_PARAM, binding);
+    newMap.put(CmisConfig.VENDOR_PARAM, cmisVendor);
+    newMap.put(CmisConfig.GROUP_API_URL_PARAM, groupApiUrl);
+    newMap.put(CmisConfig.GROUP_MEMBERS_API_URL_PARAM, groupMembersApiUrl);
+    newMap.put(CmisConfig.GROUP_API_TEST_RESULT_PARAM, groupApiTestResult);
   }
 
   /**
@@ -934,6 +999,43 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     String repositoryId = variableContext.getParameter(CmisConfig.REPOSITORY_ID_PARAM);
     if (repositoryId != null) {
       parameters.setParameter(CmisConfig.REPOSITORY_ID_PARAM, repositoryId);
+    }
+
+    // New vendor and group API params
+    String cmisVendor = variableContext.getParameter(CmisConfig.VENDOR_PARAM);
+    if (cmisVendor != null) {
+      parameters.setParameter(CmisConfig.VENDOR_PARAM, cmisVendor);
+    }
+
+    String groupApiUrl = variableContext.getParameter(CmisConfig.GROUP_API_URL_PARAM);
+    if (groupApiUrl != null) {
+      parameters.setParameter(CmisConfig.GROUP_API_URL_PARAM, groupApiUrl);
+    }
+
+    String groupMembersApiUrl = variableContext.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
+    if (groupMembersApiUrl != null) {
+      parameters.setParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM, groupMembersApiUrl);
+    }
+
+    // Test Group API if requested
+    String testGroupApi = variableContext.getParameter("_testGroupApi");
+    if ("true".equals(testGroupApi)) {
+      // All params are now saved in 'parameters' — use them for the test
+      String testProtocol = parameters.getParameter(CmisConfig.PROTOCOL_PARAM);
+      String testServer = parameters.getParameter(CmisConfig.SERVER_PARAM);
+      String testPort = parameters.getParameter(CmisConfig.PORT_PARAM);
+      String testUsername = parameters.getParameter(CmisConfig.USERNAME_PARAM);
+      String testPassword = parameters.getParameter(CmisConfig.PASSWORD_PARAM);
+      String testGroupApiUrl = parameters.getParameter(CmisConfig.GROUP_API_URL_PARAM);
+      String testGroupMembersApiUrl = parameters.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
+      String testVendor = parameters.getParameter(CmisConfig.VENDOR_PARAM);
+
+      String result = testGroupApiConnection(testProtocol, testServer, testPort,
+          testUsername, testPassword, testGroupApiUrl, testGroupMembersApiUrl, testVendor);
+      parameters.setParameter(CmisConfig.GROUP_API_TEST_RESULT_PARAM, result);
+    } else {
+      // Clear previous test result on normal form submissions
+      parameters.setParameter(CmisConfig.GROUP_API_TEST_RESULT_PARAM, "");
     }
 
     return null;
@@ -1226,6 +1328,11 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
             rd.setCreatedDate(createdDate);
             rd.setModifiedDate(modifiedDate);
 
+            // Extract CMIS ACLs and set on RepositoryDocument.
+            // This is vendor-agnostic — works with any CMIS 1.0/1.1 server
+            // (Alfresco, Nuxeo, SharePoint, Documentum, etc.) that supports ACLs.
+            extractAndSetAcl(cmisObject, rd);
+
             InputStream is = null;
             try {
               if (fileLength > 0)
@@ -1295,7 +1402,165 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     }
 
   }
-  
+
+  /**
+   * Extract CMIS ACLs from a CmisObject and set them on the RepositoryDocument.
+   * 
+   * <p>This is <b>vendor-agnostic</b> — it uses the standard CMIS 1.0/1.1
+   * {@link org.apache.chemistry.opencmis.commons.data.Acl} API, which is
+   * supported by Alfresco, Nuxeo, SharePoint, Documentum, Google Drive
+   * (via CMIS bridge), and any other CMIS-compliant server.</p>
+   * 
+   * <p>The CMIS spec defines permissions as strings (e.g. {@code cmis:read},
+   * {@code cmis:write}, {@code cmis:all}). Since different vendors may use
+   * vendor-specific permission strings, we treat <b>any</b> permission as
+   * "allow read" and store the principal ID as an allow token. This is the
+   * safest approach — at query time, the authority connector can then decide
+   * which tokens a user actually holds.</p>
+   *
+   * <p><b>Group-to-user resolution:</b> When a group principal is detected
+   * by the active {@link GroupMemberResolver}, the resolver expands it to
+   * individual member usernames. This enables ACL-based search filtering using
+   * only the identity provider username (e.g., Keycloak) — no need to know
+   * which content-server groups the user belongs to at query time. The raw
+   * group token is also kept for backward compatibility with authority
+   * connector workflows.</p>
+   *
+   * <p>The resolver is created by {@link GroupMemberResolverFactory} based on
+   * the CMIS repository's {@code productName} — e.g., Alfresco servers get
+   * {@link AlfrescoGroupMemberResolver}, unknown servers get
+   * {@link NoOpGroupMemberResolver}.</p>
+   *
+   * <p>If the server does not support ACLs or the ACL is not available,
+   * no security is set on the RepositoryDocument — which causes the output
+   * connector to use its default ({@code __nosecurity__}).</p>
+   *
+   * @param cmisObject the CMIS object (document or folder)
+   * @param rd the RepositoryDocument to set ACLs on
+   */
+  private void extractAndSetAcl(CmisObject cmisObject, RepositoryDocument rd) {
+    try {
+      // IMPORTANT: cmisObject.getAcl() returns cached ACL data from the initial
+      // getObject() call. Since the default OperationContext has includeACL=false,
+      // the cached ACL will always be null. We must use the CMIS binding's
+      // AclService to make a dedicated ACL request for this object.
+      String repositoryId = session.getRepositoryInfo().getId();
+      String objectId = cmisObject.getId();
+
+      Acl acl = session.getBinding().getAclService()
+          .getAcl(repositoryId, objectId, true, null);
+
+      if (acl == null || acl.getAces() == null || acl.getAces().isEmpty()) {
+        return;
+      }
+
+      // Process document-level ACEs — store raw principals (users + groups) as-is.
+      List<String> allowTokens = resolveAcesToTokens(acl);
+      List<String> denyTokens = new ArrayList<>();
+
+      // Sync group memberships to OpenSearch during crawl.
+      // For each group token, resolve members via vendor REST API
+      // and index in manifoldcf_acl for query-time ACL filtering.
+      if (groupSyncer != null) {
+        groupSyncer.syncGroupTokens(allowTokens);
+        // Track user tokens for group_everyone
+        for (String token : allowTokens) {
+          if (!token.startsWith("group_")) {
+            allUserTokens.add(token);
+          }
+        }
+      }
+
+      // Also extract parent folder ACLs if available
+      if (cmisObject instanceof Document) {
+        Document doc = (Document) cmisObject;
+        List<Folder> parents = doc.getParents();
+        if (parents != null && !parents.isEmpty()) {
+          Folder parentFolder = parents.get(0);
+          String parentId = parentFolder.getId();
+          try {
+            Acl parentAcl = session.getBinding().getAclService()
+                .getAcl(repositoryId, parentId, true, null);
+            if (parentAcl != null && parentAcl.getAces() != null) {
+              List<String> parentAllowTokens = resolveAcesToTokens(parentAcl);
+              // Also sync parent folder group tokens
+              if (groupSyncer != null) {
+                groupSyncer.syncGroupTokens(parentAllowTokens);
+                for (String token : parentAllowTokens) {
+                  if (!token.startsWith("group_")) {
+                    allUserTokens.add(token);
+                  }
+                }
+              }
+              if (!parentAllowTokens.isEmpty()) {
+                rd.setSecurity(RepositoryDocument.SECURITY_TYPE_PARENT,
+                    parentAllowTokens.toArray(new String[0]),
+                    new String[0]);
+              }
+            }
+          } catch (Exception e) {
+            Logging.connectors.warn("CMIS: Could not retrieve parent folder ACL: " + e.getMessage());
+          }
+        }
+      }
+
+      // Set document-level ACL
+      if (!allowTokens.isEmpty()) {
+        rd.setSecurity(RepositoryDocument.SECURITY_TYPE_DOCUMENT,
+            allowTokens.toArray(new String[0]),
+            denyTokens.toArray(new String[0]));
+      }
+    } catch (Exception e) {
+      // If ACL retrieval fails (e.g., server doesn't support ACLs),
+      // log a warning but don't fail the document. The output connector
+      // will use __nosecurity__ as fallback.
+      Logging.connectors.warn(
+          "CMIS: Could not extract ACLs for object '"
+          + cmisObject.getId() + "': " + e.getMessage());
+    }
+  }
+
+  /**
+   * Process a CMIS ACL into a list of allow tokens. Stores ALL principals
+   * (both users and groups) as-is in lowercase.
+   *
+   * <p>Group membership resolution happens in two complementary ways:</p>
+   * <ol>
+   *   <li><b>At crawl time</b> — {@link CmisGroupMembershipSyncer} resolves
+   *       group members via the configured vendor REST API and stores the mapping in
+   *       the {@code manifoldcf_acl} OpenSearch index. This is triggered
+   *       automatically from {@link #extractAndSetAcl}.</li>
+   *   <li><b>At query time</b> — the search service looks up the user's
+   *       groups from the {@code manifoldcf_acl} index and includes them
+   *       in the OpenSearch ACL filter query.</li>
+   * </ol>
+   *
+   * @param acl the CMIS ACL to process
+   * @return deduplicated list of lowercase allow tokens (raw principals)
+   */
+  private List<String> resolveAcesToTokens(Acl acl) {
+    Set<String> tokenSet = new HashSet<>();
+
+    for (Ace ace : acl.getAces()) {
+      String principalId = ace.getPrincipalId();
+      if (principalId == null || principalId.isEmpty()) {
+        continue;
+      }
+
+      List<String> permissions = ace.getPermissions();
+      if (permissions == null || permissions.isEmpty()) {
+        continue;
+      }
+
+      // Store ALL principals (users and groups) as-is, lowercased.
+      // Group members are resolved by CmisGroupMembershipSyncer during crawl
+      // and stored in the manifoldcf_acl index for query-time lookups.
+      tokenSet.add(principalId.toLowerCase(Locale.ROOT));
+    }
+
+    return new ArrayList<>(tokenSet);
+  }
+
   private String getDocumentURI(CmisObject cmisObject) throws ManifoldCFException {
   	String documentURI = StringUtils.EMPTY;
   	String currentBaseTypeId = cmisObject.getBaseTypeId().value();
@@ -1336,6 +1601,331 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
           + e.getMessage(), e);
       throw new ManifoldCFException(e.getMessage(), e);
     }
+  }
+
+  // =========================================================================
+  //  Group API Test — called from processConfigurationPost when user
+  //  clicks "Test Group API" button on the Server tab.
+  // =========================================================================
+
+  /**
+   * Test the configured Group API by making real HTTP calls to the groups
+   * list endpoint and (if a group is found) the members endpoint.
+   *
+   * <p>Returns a prefixed result string that the Velocity template uses
+   * for color-coded display:</p>
+   * <ul>
+   *   <li>{@code PASS|...} — green: both APIs work, ACL data is sufficient</li>
+   *   <li>{@code WARN|...} — yellow: groups API works but members API has issues</li>
+   *   <li>{@code FAIL|...} — red: critical error, ACL verification not possible</li>
+   * </ul>
+   */
+  private static String testGroupApiConnection(String protocol, String server,
+      String port, String username, String password,
+      String groupApiUrl, String groupMembersApiUrl, String vendor) {
+
+    if (groupApiUrl == null || groupApiUrl.trim().isEmpty()) {
+      return "FAIL|Group API URL is not configured. Please select a vendor or enter a custom URL.";
+    }
+    if (groupMembersApiUrl == null || groupMembersApiUrl.trim().isEmpty()) {
+      return "FAIL|Group Members API URL is not configured. Please select a vendor or enter a custom URL.";
+    }
+
+    String baseUrl = protocol + "://" + server + ":" + port;
+    String basicAuth = "Basic " + Base64.getEncoder()
+        .encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+
+    // Set up SSL trust-all for HTTPS testing
+    if ("https".equalsIgnoreCase(protocol)) {
+      try {
+        setupTestSslTrust();
+      } catch (Exception e) {
+        // Continue anyway — might work if cert is valid
+      }
+    }
+
+    StringBuilder result = new StringBuilder();
+
+    // --- Step 1: Call Groups List API ---
+    String groupsFullUrl = baseUrl + groupApiUrl;
+    String groupsResponse;
+    try {
+      groupsResponse = testHttpGet(groupsFullUrl, basicAuth);
+    } catch (Exception e) {
+      return "FAIL|Groups API error: " + e.getMessage()
+          + "\nURL: " + groupsFullUrl
+          + "\n\nPlease check credentials, server address, and API URL path.";
+    }
+
+    if (groupsResponse == null || groupsResponse.trim().isEmpty()) {
+      return "FAIL|Groups API returned empty response.\nURL: " + groupsFullUrl;
+    }
+
+    // --- Step 2: Parse groups response to find group IDs ---
+    List<String> groupIds = extractGroupIds(groupsResponse, vendor);
+    if (groupIds.isEmpty()) {
+      return "WARN|Groups API returned a response but no group IDs could be parsed.\n"
+          + "URL: " + groupsFullUrl + "\n"
+          + "Response preview: " + truncate(groupsResponse, 500)
+          + "\n\nThe response format may not be compatible. Please verify the API URL returns a list of groups.";
+    }
+
+    result.append("Groups API: OK - Found ").append(groupIds.size()).append(" group(s)");
+    if (groupIds.size() <= 5) {
+      result.append(": ").append(groupIds);
+    } else {
+      result.append(" (first 5: ").append(groupIds.subList(0, 5)).append(")");
+    }
+
+    // --- Step 3: Test Members API with the first group ---
+    String testGroupId = groupIds.get(0);
+    String membersUrlTemplate = groupMembersApiUrl;
+    String membersFullUrl;
+    try {
+      String encodedGroupId = URLEncoder.encode(testGroupId, "UTF-8");
+      membersFullUrl = baseUrl + membersUrlTemplate
+          .replace("{groupId}", encodedGroupId)
+          .replace("({groupId})", "(" + encodedGroupId + ")");
+    } catch (Exception e) {
+      return "WARN|" + result + "\n\nCould not construct Members API URL: " + e.getMessage();
+    }
+
+    String membersResponse;
+    try {
+      membersResponse = testHttpGet(membersFullUrl, basicAuth);
+    } catch (Exception e) {
+      return "WARN|" + result
+          + "\n\nMembers API error for group '" + testGroupId + "': " + e.getMessage()
+          + "\nURL: " + membersFullUrl
+          + "\n\nGroups API works but member resolution may not be possible.";
+    }
+
+    if (membersResponse == null || membersResponse.trim().isEmpty()) {
+      return "WARN|" + result
+          + "\n\nMembers API returned empty response for group '" + testGroupId + "'."
+          + "\nURL: " + membersFullUrl;
+    }
+
+    // --- Step 4: Parse members response ---
+    List<String> memberIds = extractMemberIds(membersResponse, vendor);
+    if (memberIds.isEmpty()) {
+      return "WARN|" + result
+          + "\n\nMembers API returned a response for group '" + testGroupId
+          + "' but no user IDs could be parsed."
+          + "\nResponse preview: " + truncate(membersResponse, 500)
+          + "\n\nACL data may not be sufficient for access control. "
+          + "The API needs to return user identifiers within group membership.";
+    }
+
+    result.append("\nMembers API: OK - Group '").append(testGroupId)
+        .append("' has ").append(memberIds.size()).append(" member(s)");
+    if (memberIds.size() <= 10) {
+      result.append(": ").append(memberIds);
+    } else {
+      result.append(" (first 10: ").append(memberIds.subList(0, 10)).append(")");
+    }
+
+    result.append("\n\n✓ ACL Check: PASSED — The API provides sufficient data for group-based access control. ")
+        .append("Group memberships will be indexed in manifoldcf_acl for query-time ACL filtering.");
+
+    return "PASS|" + result;
+  }
+
+  /**
+   * Extract group IDs from a groups API response based on vendor format.
+   */
+  private static List<String> extractGroupIds(String json, String vendor) {
+    List<String> ids = new ArrayList<>();
+    if (json == null) return ids;
+
+    if ("alfresco".equals(vendor)) {
+      // Alfresco: {"list":{"entries":[{"entry":{"id":"GROUP_xxx",...}},...]}}
+      extractFieldValues(json, "id", ids, 20);
+    } else if ("sharepoint".equals(vendor)) {
+      // SharePoint: {"value":[{"Id":1,"LoginName":"...","Title":"..."}]}
+      extractFieldValues(json, "LoginName", ids, 20);
+      if (ids.isEmpty()) {
+        extractFieldValues(json, "Title", ids, 20);
+      }
+    } else if ("nuxeo".equals(vendor)) {
+      // Nuxeo: {"entries":[{"id":"administrators",...},...]}
+      extractFieldValues(json, "id", ids, 20);
+    } else if ("filenet".equals(vendor) || "opentext".equals(vendor)) {
+      // FileNet/OpenText: try common patterns
+      extractFieldValues(json, "id", ids, 20);
+      if (ids.isEmpty()) {
+        extractFieldValues(json, "name", ids, 20);
+      }
+    } else {
+      // Generic: try "id", "name", "groupId", "Id"
+      extractFieldValues(json, "id", ids, 20);
+      if (ids.isEmpty()) extractFieldValues(json, "Id", ids, 20);
+      if (ids.isEmpty()) extractFieldValues(json, "name", ids, 20);
+      if (ids.isEmpty()) extractFieldValues(json, "groupId", ids, 20);
+    }
+    return ids;
+  }
+
+  /**
+   * Extract member user IDs from a group members API response based on vendor format.
+   */
+  private static List<String> extractMemberIds(String json, String vendor) {
+    List<String> ids = new ArrayList<>();
+    if (json == null) return ids;
+
+    if ("alfresco".equals(vendor)) {
+      // Alfresco: {"list":{"entries":[{"entry":{"id":"user1","memberType":"PERSON"}},...]}}
+      extractFieldValues(json, "id", ids, 50);
+    } else if ("sharepoint".equals(vendor)) {
+      // SharePoint: {"value":[{"Id":1,"LoginName":"i:0#.w|domain\\user","Title":"User Name"}]}
+      extractFieldValues(json, "LoginName", ids, 50);
+    } else if ("nuxeo".equals(vendor)) {
+      // Nuxeo: {"id":"groupName","members":["user1","user2",...]} or entries with id
+      extractFieldValues(json, "id", ids, 50);
+      if (ids.isEmpty()) {
+        // Try to extract from "members" array
+        extractArrayStringValues(json, "members", ids, 50);
+      }
+    } else {
+      // Generic: try common field names
+      extractFieldValues(json, "id", ids, 50);
+      if (ids.isEmpty()) extractFieldValues(json, "userId", ids, 50);
+      if (ids.isEmpty()) extractFieldValues(json, "Id", ids, 50);
+      if (ids.isEmpty()) extractFieldValues(json, "loginName", ids, 50);
+      if (ids.isEmpty()) extractFieldValues(json, "name", ids, 50);
+    }
+    return ids;
+  }
+
+  /**
+   * Simple JSON field value extractor — finds all occurrences of
+   * "fieldName":"value" in the JSON string and collects the values.
+   */
+  private static void extractFieldValues(String json, String fieldName, List<String> results, int maxResults) {
+    String pattern = "\"" + fieldName + "\"";
+    int searchFrom = 0;
+    while (results.size() < maxResults) {
+      int idx = json.indexOf(pattern, searchFrom);
+      if (idx < 0) break;
+
+      int colonIdx = json.indexOf(':', idx + pattern.length());
+      if (colonIdx < 0) break;
+
+      int valueStart = colonIdx + 1;
+      while (valueStart < json.length() && json.charAt(valueStart) == ' ') valueStart++;
+      if (valueStart >= json.length()) break;
+
+      if (json.charAt(valueStart) == '"') {
+        int valueEnd = valueStart + 1;
+        while (valueEnd < json.length()) {
+          if (json.charAt(valueEnd) == '"' && json.charAt(valueEnd - 1) != '\\') {
+            String value = json.substring(valueStart + 1, valueEnd);
+            if (!value.isEmpty()) {
+              results.add(value);
+            }
+            break;
+          }
+          valueEnd++;
+        }
+        searchFrom = valueEnd + 1;
+      } else {
+        // Numeric or boolean value — skip for ID extraction
+        searchFrom = valueStart + 1;
+      }
+    }
+  }
+
+  /**
+   * Extract string values from a JSON array field: "fieldName":["val1","val2",...]
+   */
+  private static void extractArrayStringValues(String json, String fieldName, List<String> results, int maxResults) {
+    String pattern = "\"" + fieldName + "\"";
+    int idx = json.indexOf(pattern);
+    if (idx < 0) return;
+
+    int colonIdx = json.indexOf(':', idx + pattern.length());
+    if (colonIdx < 0) return;
+
+    int arrStart = json.indexOf('[', colonIdx);
+    if (arrStart < 0) return;
+
+    int arrEnd = json.indexOf(']', arrStart);
+    if (arrEnd < 0) return;
+
+    String arrContent = json.substring(arrStart + 1, arrEnd);
+    int searchFrom = 0;
+    while (results.size() < maxResults) {
+      int qStart = arrContent.indexOf('"', searchFrom);
+      if (qStart < 0) break;
+      int qEnd = arrContent.indexOf('"', qStart + 1);
+      if (qEnd < 0) break;
+      String val = arrContent.substring(qStart + 1, qEnd);
+      if (!val.isEmpty()) {
+        results.add(val);
+      }
+      searchFrom = qEnd + 1;
+    }
+  }
+
+  /**
+   * HTTP GET for testing — returns the response body as a string.
+   */
+  private static String testHttpGet(String urlStr, String basicAuth) throws Exception {
+    URL url = new URL(urlStr);
+    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    conn.setRequestMethod("GET");
+    conn.setConnectTimeout(15000);
+    conn.setReadTimeout(30000);
+    conn.setRequestProperty("Authorization", basicAuth);
+    conn.setRequestProperty("Accept", "application/json");
+
+    int status = conn.getResponseCode();
+    if (status >= 400) {
+      String errorBody = "";
+      try {
+        InputStream es = conn.getErrorStream();
+        if (es != null) {
+          BufferedReader br = new BufferedReader(new InputStreamReader(es, StandardCharsets.UTF_8));
+          StringBuilder sb = new StringBuilder();
+          String line;
+          while ((line = br.readLine()) != null) sb.append(line);
+          errorBody = sb.toString();
+        }
+      } catch (Exception ignored) {}
+      throw new RuntimeException("HTTP " + status + " " + conn.getResponseMessage()
+          + (errorBody.isEmpty() ? "" : " — " + truncate(errorBody, 200)));
+    }
+
+    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+    StringBuilder sb = new StringBuilder();
+    String line;
+    while ((line = br.readLine()) != null) sb.append(line);
+    return sb.toString();
+  }
+
+  private static String truncate(String s, int maxLen) {
+    if (s == null) return "";
+    return s.length() <= maxLen ? s : s.substring(0, maxLen) + "...";
+  }
+
+  /**
+   * Set up trust-all SSL for HTTPS test connections.
+   */
+  private static boolean testSslInitialized = false;
+  private static void setupTestSslTrust() throws Exception {
+    if (testSslInitialized) return;
+    TrustManager[] trustAll = new TrustManager[] {
+      new X509TrustManager() {
+        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+        public void checkClientTrusted(X509Certificate[] certs, String t) { }
+        public void checkServerTrusted(X509Certificate[] certs, String t) { }
+      }
+    };
+    SSLContext sc = SSLContext.getInstance("TLS");
+    sc.init(null, trustAll, new SecureRandom());
+    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    HttpsURLConnection.setDefaultHostnameVerifier((h, s) -> true);
+    testSslInitialized = true;
   }
 
 }

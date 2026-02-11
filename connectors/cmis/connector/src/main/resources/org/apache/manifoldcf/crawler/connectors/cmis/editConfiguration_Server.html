@@ -15,6 +15,9 @@
  limitations under the License.
 -->
 
+## Hidden test trigger field (always present, set by JS before submit)
+<input type="hidden" name="_testGroupApi" id="_testGroupApi" value="" />
+
 #if($TABNAME == $ResourceBundle.getString('CmisRepositoryConnector.Server'))
 
 <table class="displaytable">
@@ -122,6 +125,85 @@
       </nobr>
     </td>
   </tr>
+
+  <!-- ===== Group / ACL Configuration ===== -->
+  <tr>
+    <td class="separator" colspan="2">
+      <hr />
+      <nobr><b>$Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.GroupAclConfiguration'))</b></nobr>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">
+      <nobr>
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.CmisVendorColon'))
+      </nobr>
+    </td>
+    <td class="value">
+      <select id="cmisVendor" name="cmisVendor" onchange="onVendorChange();">
+        <option value="alfresco" #if($CMISVENDOR == "alfresco") selected="selected" #end>Alfresco Content Services (Hyland Alfresco)</option>
+        <option value="sharepoint" #if($CMISVENDOR == "sharepoint") selected="selected" #end>Microsoft SharePoint</option>
+        <option value="filenet" #if($CMISVENDOR == "filenet") selected="selected" #end>IBM FileNet P8 / Content Platform Engine</option>
+        <option value="opentext" #if($CMISVENDOR == "opentext") selected="selected" #end>OpenText (Documentum / Content Server)</option>
+        <option value="nuxeo" #if($CMISVENDOR == "nuxeo") selected="selected" #end>Nuxeo</option>
+        <option value="hptrim" #if($CMISVENDOR == "hptrim") selected="selected" #end>HP TRIM / Records Manager (OpenText)</option>
+        <option value="other" #if($CMISVENDOR == "other" || $CMISVENDOR == "") selected="selected" #end>Other</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">
+      <nobr>
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.GroupApiUrlColon'))
+      </nobr>
+    </td>
+    <td class="value">
+      <input type="text" id="groupApiUrl" name="groupApiUrl" size="80"
+             value="$Encoder.attributeEscape($GROUPAPIURL)" />
+      <br/><small>e.g. /alfresco/api/-default-/public/alfresco/versions/1/groups</small>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">
+      <nobr>
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.GroupMembersApiUrlColon'))
+      </nobr>
+    </td>
+    <td class="value">
+      <input type="text" id="groupMembersApiUrl" name="groupMembersApiUrl" size="80"
+             value="$Encoder.attributeEscape($GROUPMEMBERSAPIURL)" />
+      <br/><small>$Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.GroupApiPlaceholderHint'))</small>
+    </td>
+  </tr>
+  <tr>
+    <td class="description">&nbsp;</td>
+    <td class="value">
+      <input type="button" value="$Encoder.attributeEscape($ResourceBundle.getString('CmisRepositoryConnector.TestGroupApi'))"
+             onclick="testGroupApi();" />
+    </td>
+  </tr>
+
+  ## Display test result if available
+  #if($GROUPAPITESTRESULT && $GROUPAPITESTRESULT != "")
+  <tr>
+    <td class="description">
+      <nobr>
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.TestGroupApiResult'))
+      </nobr>
+    </td>
+    <td class="value">
+      #if($GROUPAPITESTRESULT.startsWith("PASS"))
+        <div style="background-color:#dff0d8; border:1px solid #d6e9c6; color:#3c763d; padding:10px; border-radius:4px; margin:5px 0; white-space:pre-wrap;">$Encoder.bodyEscape($GROUPAPITESTRESULT.substring(5))</div>
+      #elseif($GROUPAPITESTRESULT.startsWith("FAIL"))
+        <div style="background-color:#f2dede; border:1px solid #ebccd1; color:#a94442; padding:10px; border-radius:4px; margin:5px 0; white-space:pre-wrap;">$Encoder.bodyEscape($GROUPAPITESTRESULT.substring(5))</div>
+      #elseif($GROUPAPITESTRESULT.startsWith("WARN"))
+        <div style="background-color:#fcf8e3; border:1px solid #faebcc; color:#8a6d3b; padding:10px; border-radius:4px; margin:5px 0; white-space:pre-wrap;">$Encoder.bodyEscape($GROUPAPITESTRESULT.substring(5))</div>
+      #else
+        <div style="background-color:#d9edf7; border:1px solid #bce8f1; color:#31708f; padding:10px; border-radius:4px; margin:5px 0; white-space:pre-wrap;">$Encoder.bodyEscape($GROUPAPITESTRESULT)</div>
+      #end
+    </td>
+  </tr>
+  #end
 </table>
 
 #else
@@ -134,5 +216,8 @@
 <input type="hidden" name="path" value="$Encoder.attributeEscape($PATH)" />
 <input type="hidden" name="binding" value="$Encoder.attributeEscape($BINDING)" />
 <input type="hidden" name="repositoryId" value="$Encoder.attributeEscape($REPOSITORYID)" />
+<input type="hidden" name="cmisVendor" value="$Encoder.attributeEscape($CMISVENDOR)" />
+<input type="hidden" name="groupApiUrl" value="$Encoder.attributeEscape($GROUPAPIURL)" />
+<input type="hidden" name="groupMembersApiUrl" value="$Encoder.attributeEscape($GROUPMEMBERSAPIURL)" />
 
 #end
