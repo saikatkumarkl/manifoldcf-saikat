@@ -58,7 +58,8 @@ public class ElasticSearchParam extends HashMap<ParameterEnum, String>
     
     FIELDLIST(""),
     ELASTICSEARCH_SOCKET_TIMEOUT("900000"),
-    ELASTICSEARCH_CONNECTION_TIMEOUT("60000");
+    ELASTICSEARCH_CONNECTION_TIMEOUT("60000"),
+    AUTHORITIESINDEXNAME("");
 
     final protected String defaultValue;
 

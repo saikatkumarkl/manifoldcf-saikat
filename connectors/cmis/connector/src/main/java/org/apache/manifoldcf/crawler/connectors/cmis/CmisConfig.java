@@ -77,9 +77,19 @@ public class CmisConfig {
   /** Transient test result parameter (not persisted meaningfully) */
   public static final String GROUP_API_TEST_RESULT_PARAM = "groupApiTestResult";
 
+  /** Skip ACL wait — if true, document indexing proceeds without waiting for authorities index */
+  public static final String SKIP_ACL_WAIT_PARAM = "skipAclWait";
+
+  /** Max file size in bytes — files larger than this are skipped during indexing.
+   *  Set to 0 or empty to disable the limit (index all files regardless of size). */
+  public static final String MAX_FILE_SIZE_PARAM = "maxFileSize";
+
   // Default values for new params
   public static final String VENDOR_DEFAULT_VALUE = "other";
   public static final String GROUP_API_URL_DEFAULT_VALUE = "";
   public static final String GROUP_MEMBERS_API_URL_DEFAULT_VALUE = "";
+  public static final String SKIP_ACL_WAIT_DEFAULT_VALUE = "false";
+  /** Default: 0 = no limit */
+  public static final String MAX_FILE_SIZE_DEFAULT_VALUE = "0";
   
 }

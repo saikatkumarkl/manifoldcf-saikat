@@ -57,6 +57,16 @@ try
     }
   }
 
+  function Start(jobID)
+  {
+    if (confirm("<%=Messages.getBodyString(pageContext.getRequest().getLocale(),"listjobs.StartJobConfirm")%>"))
+    {
+      document.listjobs.op.value="Start";
+      document.listjobs.jobid.value=jobID;
+      $.ManifoldCF.submit(document.listjobs);
+    }
+  }
+
   //-->
 </script>
 
@@ -122,6 +132,9 @@ try
                   <a data-href='<%="editjob.jsp?origjobid="+jd.getID()%>'
                           title='<%=Messages.getAttributeString(pageContext.getRequest().getLocale(),"listjobs.CopyJob")+" "+jd.getID()%>'
                           class="link btn btn-primary btn-xs" role="button" data-toggle="tooltip"><i class="fa fa-clipboard fa-fw" aria-hidden="true"></i><%=Messages.getBodyString(pageContext.getRequest().getLocale(),"listjobs.Copy")%></a>
+                  <a href='<%="javascript:Start(\""+ jd.getID()+"\")" %>'
+                          title='<%=Messages.getAttributeString(pageContext.getRequest().getLocale(),"listjobs.RunJob")+" "+jd.getID()%>'
+                          class="btn btn-warning btn-xs" role="button" data-toggle="tooltip"><i class="fa fa-play fa-fw" aria-hidden="true"></i><%=Messages.getBodyString(pageContext.getRequest().getLocale(),"listjobs.Run")%></a>
                 </div>
               </td>
               <td><%=org.apache.manifoldcf.ui.util.Encoder.bodyEscape(jd.getDescription())%></td>

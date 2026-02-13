@@ -47,7 +47,13 @@ import org.apache.manifoldcf.crawler.system.Logging;
  * during the ManifoldCF crawl. This runs inline with document processing:
  * when a document's ACL tokens are extracted, any new group tokens are
  * resolved via the configured vendor REST API and their members are indexed in the
- * {@code manifoldcf_acl} OpenSearch index.
+ * {@code manifold_{repoName}_authorities} OpenSearch index.
+ *
+ * <p>Index naming convention:</p>
+ * <ul>
+ *   <li>Authorities index: {@code manifold_{repoConnectionName}_authorities}</li>
+ *   <li>The repoConnectionName is sanitized: lowercased, spaces→underscores, special chars removed</li>
+ * </ul>
  *
  * <p>Architecture:</p>
  * <pre>
@@ -59,7 +65,7 @@ import org.apache.manifoldcf.crawler.system.Logging;
  *                                              ↓
  *                               Vendor REST API: /groups/{id}/members
  *                                              ↓
- *                               OpenSearch: PUT manifoldcf_acl/_doc/{token}
+ *                               OpenSearch: PUT manifold_{repo}_authorities/_doc/{token}
  * </pre>
  *
  * <p>Configuration via environment variables:</p>
@@ -73,7 +79,8 @@ import org.apache.manifoldcf.crawler.system.Logging;
  */
 public class CmisGroupMembershipSyncer {
 
-  private static final String GROUPS_INDEX = "manifoldcf_acl";
+  /** Default authorities index name (used when no repo connection name is provided) */
+  private static final String DEFAULT_AUTHORITIES_INDEX = "manifoldcf_authorities";
   private static final int MAX_RECURSION_DEPTH = 5;
   private static final int HTTP_CONNECT_TIMEOUT = 15000;
   private static final int HTTP_READ_TIMEOUT = 30000;
@@ -89,6 +96,9 @@ public class CmisGroupMembershipSyncer {
 
   /** Configured group members API path template with {groupId} placeholder */
   private final String groupMembersApiPath;
+
+  /** Dynamic authorities index name: manifold_{repoName}_authorities */
+  private final String authoritiesIndex;
 
   /** OpenSearch base URL, e.g. http://localhost:9200 */
   private final String opensearchUrl;
@@ -119,11 +129,20 @@ public class CmisGroupMembershipSyncer {
    * @param vendor    CMIS vendor type (alfresco, sharepoint, etc.) — may be null
    * @param groupApiPath  Group list API path (relative to baseUrl) — may be null/empty
    * @param groupMembersApiPath  Group members API path template with {groupId} — may be null/empty
+   * @param repoConnectionName  Repository connection name (used for index naming) — may be null
    */
   public CmisGroupMembershipSyncer(String protocol, String server, String port,
                                     String username, String password,
-                                    String vendor, String groupApiPath, String groupMembersApiPath) {
+                                    String vendor, String groupApiPath, String groupMembersApiPath,
+                                    String repoConnectionName) {
     this.baseUrl = protocol + "://" + server + ":" + port;
+
+    // Derive authorities index name from repo connection name
+    if (repoConnectionName != null && !repoConnectionName.isEmpty()) {
+      this.authoritiesIndex = "manifold_" + sanitizeIndexName(repoConnectionName) + "_authorities";
+    } else {
+      this.authoritiesIndex = DEFAULT_AUTHORITIES_INDEX;
+    }
     this.vendor = (vendor != null && !vendor.isEmpty()) ? vendor : "other";
 
     // Use configured paths or fall back to Alfresco defaults for backward compatibility
@@ -177,15 +196,35 @@ public class CmisGroupMembershipSyncer {
         + " | vendor=" + this.vendor
         + " | groupApiPath=" + this.groupApiPath
         + " | groupMembersApiPath=" + this.groupMembersApiPath
+        + " | authoritiesIndex=" + this.authoritiesIndex
         + " | opensearch=" + opensearchUrl
         + " | enabled=" + enabled);
+  }
+
+  /**
+   * Get the authorities index name for this repository connection.
+   * @return index name like "manifold_alfresco_cmis_authorities"
+   */
+  public String getAuthoritiesIndexName() {
+    return authoritiesIndex;
+  }
+
+  /**
+   * Sanitize a connection name for use as an OpenSearch index name.
+   * Lowercases, replaces spaces/special chars with underscores, removes leading underscores.
+   */
+  static String sanitizeIndexName(String name) {
+    return name.toLowerCase()
+        .replaceAll("[^a-z0-9_]", "_")
+        .replaceAll("_+", "_")
+        .replaceAll("^_|_$", "");
   }
 
   /**
    * Process a list of allow tokens extracted from a document's ACL.
    * For each group token (starting with "group_") that hasn't been resolved
    * yet, query vendor REST API for the group's members and index the
-   * group→members mapping in the manifoldcf_acl OpenSearch index.
+   * group→members mapping in the authorities OpenSearch index.
    *
    * <p>This method is safe to call repeatedly — resolved groups are cached
    * and won't be re-queried.</p>
@@ -292,6 +331,107 @@ public class CmisGroupMembershipSyncer {
    */
   public int getResolvedGroupCount() {
     return resolvedGroups.size();
+  }
+
+  /**
+   * Proactively sync ALL groups from the vendor REST API into the authorities index.
+   *
+   * <p>This method is called when a job uses the special CMIS query marker
+   * {@code __SYNC_AUTHORITIES_ONLY__}. Instead of waiting to encounter groups
+   * during document ACL processing, this fetches the complete list of groups
+   * from the vendor API and resolves each one.</p>
+   *
+   * <p>For Alfresco, this paginates through {@code GET /groups?skipCount=...&maxItems=...}
+   * to enumerate all groups, then resolves members for each group using
+   * the configured members API path.</p>
+   */
+  public void syncAllGroups() {
+    if (!enabled) {
+      Logging.connectors.info("CMIS GroupSync: syncAllGroups() skipped — syncer not enabled "
+          + "(vendor='" + vendor + "', groupApiUrl='" + groupApiPath + "')");
+      return;
+    }
+
+    Logging.connectors.info("CMIS GroupSync: Starting full group sync for all groups...");
+
+    if (!indexInitialized) {
+      ensureGroupsIndex();
+      indexInitialized = true;
+    }
+
+    int totalGroups = 0;
+    int totalMembers = 0;
+
+    try {
+      int skipCount = 0;
+      int maxItems = 100;
+      boolean hasMore = true;
+
+      while (hasMore) {
+        String url = baseUrl + groupApiPath + "?skipCount=" + skipCount + "&maxItems=" + maxItems;
+        String response = httpGet(url);
+        if (response == null || response.contains("\"error\"")) {
+          Logging.connectors.warn("CMIS GroupSync: Error fetching groups page at skipCount=" + skipCount);
+          break;
+        }
+
+        int searchFrom = 0;
+        int foundInPage = 0;
+
+        // Parse group entries (Alfresco format: {"list":{"entries":[{"entry":{"id":"GROUP_..."}}]}})
+        while (true) {
+          int entryIdx = response.indexOf("\"entry\"", searchFrom);
+          if (entryIdx < 0) break;
+
+          int braceStart = response.indexOf('{', entryIdx + 7);
+          if (braceStart < 0) break;
+          int braceEnd = findMatchingBrace(response, braceStart);
+          if (braceEnd < 0) break;
+
+          String entryJson = response.substring(braceStart, braceEnd + 1);
+          String groupId = extractJsonField(entryJson, "id");
+
+          if (groupId != null) {
+            foundInPage++;
+            // Convert to ACL token format (lowercase)
+            String aclToken = groupId.toLowerCase();
+            if (!aclToken.startsWith("group_")) {
+              aclToken = "group_" + aclToken;
+            }
+
+            // Skip if already resolved
+            if (resolvedGroups.contains(aclToken)) {
+              continue;
+            }
+
+            try {
+              Set<String> members = getGroupMembersRecursive(groupId, new HashSet<>(), 0);
+              indexGroupDocument(aclToken, members);
+              resolvedGroups.add(aclToken);
+              totalGroups++;
+              totalMembers += members.size();
+              Logging.connectors.info("CMIS GroupSync: [" + totalGroups + "] "
+                  + aclToken + " → " + members.size() + " members");
+            } catch (Exception e) {
+              Logging.connectors.warn("CMIS GroupSync: Failed to sync group '"
+                  + groupId + "': " + e.getMessage());
+              resolvedGroups.add(aclToken);
+            }
+          }
+
+          searchFrom = braceEnd + 1;
+        }
+
+        String hasMoreStr = extractJsonField(response, "hasMoreItems");
+        hasMore = "true".equals(hasMoreStr) && foundInPage > 0;
+        skipCount += maxItems;
+      }
+    } catch (Exception e) {
+      Logging.connectors.warn("CMIS GroupSync: Error during full group sync: " + e.getMessage());
+    }
+
+    Logging.connectors.info("CMIS GroupSync: Full group sync complete — "
+        + totalGroups + " groups, " + totalMembers + " total member entries");
   }
 
   // =========================================================================
@@ -553,13 +693,13 @@ public class CmisGroupMembershipSyncer {
   // =========================================================================
 
   /**
-   * Ensure the manifoldcf_acl index exists with the proper mapping.
+   * Ensure the authorities index exists with the proper mapping.
    * Creates it if it doesn't exist; does nothing if it already exists.
    */
   private void ensureGroupsIndex() {
     try {
       // Check if index exists (HEAD request returns 200 if exists, 404 if not)
-      String checkUrl = opensearchUrl + "/" + GROUPS_INDEX;
+      String checkUrl = opensearchUrl + "/" + authoritiesIndex;
       URL url = new URL(checkUrl);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("HEAD");
@@ -569,24 +709,25 @@ public class CmisGroupMembershipSyncer {
       conn.disconnect();
 
       if (status == 200) {
-        Logging.connectors.info("CMIS GroupSync: Index '" + GROUPS_INDEX + "' already exists");
+        Logging.connectors.info("CMIS GroupSync: Index '" + authoritiesIndex + "' already exists");
         return;
       }
 
       // Create the index with proper mapping
+      // Field name "group_id" must match what ElasticSearchAuthoritiesExpander queries
       String mapping = "{"
           + "\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0},"
           + "\"mappings\":{\"properties\":{"
-          + "\"acl_token\":{\"type\":\"keyword\"},"
+          + "\"group_id\":{\"type\":\"keyword\"},"
           + "\"display_name\":{\"type\":\"text\"},"
           + "\"members\":{\"type\":\"keyword\"},"
           + "\"member_count\":{\"type\":\"integer\"},"
           + "\"synced_at\":{\"type\":\"date\"}"
           + "}}}";
 
-      String response = httpPut(opensearchUrl + "/" + GROUPS_INDEX, mapping);
+      String response = httpPut(opensearchUrl + "/" + authoritiesIndex, mapping);
       if (response != null && response.contains("\"acknowledged\":true")) {
-        Logging.connectors.info("CMIS GroupSync: Created index '" + GROUPS_INDEX + "'");
+        Logging.connectors.info("CMIS GroupSync: Created index '" + authoritiesIndex + "'");
       } else {
         Logging.connectors.warn("CMIS GroupSync: Index creation response: " + response);
       }
@@ -602,7 +743,7 @@ public class CmisGroupMembershipSyncer {
   private void indexGroupDocument(String aclToken, Set<String> members) {
     try {
       StringBuilder doc = new StringBuilder();
-      doc.append("{\"acl_token\":\"").append(escapeJson(aclToken)).append("\",");
+      doc.append("{\"group_id\":\"").append(escapeJson(aclToken)).append("\",");
       doc.append("\"display_name\":\"").append(escapeJson(aclToken)).append("\",");
       doc.append("\"members\":[");
       boolean first = true;
@@ -617,7 +758,7 @@ public class CmisGroupMembershipSyncer {
       doc.append("}");
 
       String encodedId = URLEncoder.encode(aclToken, "UTF-8");
-      String response = httpPut(opensearchUrl + "/" + GROUPS_INDEX + "/_doc/" + encodedId, doc.toString());
+      String response = httpPut(opensearchUrl + "/" + authoritiesIndex + "/_doc/" + encodedId, doc.toString());
 
       if (response == null) {
         Logging.connectors.warn("CMIS GroupSync: Null response indexing " + aclToken);

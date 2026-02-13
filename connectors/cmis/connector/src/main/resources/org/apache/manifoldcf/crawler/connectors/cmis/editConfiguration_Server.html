@@ -204,6 +204,27 @@
     </td>
   </tr>
   #end
+
+  <!-- ===== Skip ACL Wait ===== -->
+  <tr>
+    <td class="separator" colspan="2">
+      <hr />
+    </td>
+  </tr>
+  <tr>
+    <td class="description">
+      <nobr>
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.SkipAclWaitColon'))
+      </nobr>
+    </td>
+    <td class="value">
+      <input type="checkbox" id="skipAclWait" name="skipAclWait" value="true"
+             #if($SKIPACLWAIT == "true") checked="checked" #end />
+      <label for="skipAclWait">
+        $Encoder.bodyEscape($ResourceBundle.getString('CmisRepositoryConnector.SkipAclWaitHint'))
+      </label>
+    </td>
+  </tr>
 </table>
 
 #else
@@ -219,5 +240,6 @@
 <input type="hidden" name="cmisVendor" value="$Encoder.attributeEscape($CMISVENDOR)" />
 <input type="hidden" name="groupApiUrl" value="$Encoder.attributeEscape($GROUPAPIURL)" />
 <input type="hidden" name="groupMembersApiUrl" value="$Encoder.attributeEscape($GROUPMEMBERSAPIURL)" />
+<input type="hidden" name="skipAclWait" value="$Encoder.attributeEscape($SKIPACLWAIT)" />
 
 #end

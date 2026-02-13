@@ -4,6 +4,7 @@ org/apache/manifoldcf/agents/output/elasticsearch/Messages.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchParam$ParameterEnum.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchConfig.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchParam.class
+org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchAuthoritiesExpander.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchIndex$IndexRequestEntity.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchAction$CommandEnum.class
 org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchConnection$Result.class

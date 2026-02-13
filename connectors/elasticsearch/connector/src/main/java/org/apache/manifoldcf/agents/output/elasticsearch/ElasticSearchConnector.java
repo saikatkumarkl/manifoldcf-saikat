@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Set;
 //import java.util.concurrent.TimeUnit;
 
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -449,7 +450,24 @@ public class ElasticSearchConnector extends BaseOutputConnector
     ElasticSearchIndex oi = new ElasticSearchIndex(client, config);
     try
     {
-      oi.execute(compressedDocumentURI, document, inputStream, acls, denyAcls, shareAcls, shareDenyAcls, parentAcls, parentDenyAcls, documentURI);
+      // Expand ACL group tokens into individual usernames via the authorities index
+      String[] authorities = null;
+      String authoritiesIndexName = config.getAuthoritiesIndexName();
+      if (authoritiesIndexName != null && authoritiesIndexName.length() > 0 && acls != null && acls.length > 0) {
+        try {
+          ElasticSearchAuthoritiesExpander expander = new ElasticSearchAuthoritiesExpander(
+              client, config.getServerLocation(), authoritiesIndexName);
+          Set<String> expandedUsers = expander.expandAclToUsers(acls);
+          if (!expandedUsers.isEmpty()) {
+            authorities = expandedUsers.toArray(new String[0]);
+          }
+        } catch (Exception e) {
+          Logging.connectors.warn("ES: Failed to expand authorities for document " + documentURI + ": " + e.getMessage());
+          // Non-fatal — index without authorities field
+        }
+      }
+
+      oi.execute(compressedDocumentURI, document, inputStream, acls, denyAcls, shareAcls, shareDenyAcls, parentAcls, parentDenyAcls, authorities, documentURI);
       if (oi.getResult() != Result.OK)
         return DOCUMENTSTATUS_REJECTED;
       return DOCUMENTSTATUS_ACCEPTED;

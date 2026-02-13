@@ -58,7 +58,8 @@ public class ElasticSearchConfig extends ElasticSearchParam
     ParameterEnum.INDEXINGDATEATTRIBUTENAME,
     ParameterEnum.MIMETYPEATTRIBUTENAME,
     ParameterEnum.ELASTICSEARCH_SOCKET_TIMEOUT,
-    ParameterEnum.ELASTICSEARCH_CONNECTION_TIMEOUT
+    ParameterEnum.ELASTICSEARCH_CONNECTION_TIMEOUT,
+    ParameterEnum.AUTHORITIESINDEXNAME
   };
 
   /** Build a set of ElasticSearchParameters by reading ConfigParams. If the
@@ -300,6 +301,12 @@ public class ElasticSearchConfig extends ElasticSearchParam
   final public String getMimeTypeAttributeName()
   {
     return get(ParameterEnum.MIMETYPEATTRIBUTENAME);
+  }
+
+  /** Get the authorities index name. If empty/null, ACL expansion is disabled. */
+  final public String getAuthoritiesIndexName()
+  {
+    return get(ParameterEnum.AUTHORITIESINDEXNAME);
   }
 
 }

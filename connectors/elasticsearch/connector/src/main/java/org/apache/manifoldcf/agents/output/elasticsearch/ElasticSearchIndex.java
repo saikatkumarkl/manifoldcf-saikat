@@ -77,6 +77,7 @@ public class ElasticSearchIndex extends ElasticSearchConnection
     private final String[] shareDenyAcls;
     private final String[] parentAcls;
     private final String[] parentDenyAcls;
+    private final String[] authorities;
     private final boolean useIngesterAttachment;
     private final boolean useMapperAttachments;
     private final String contentAttributeName;
@@ -89,6 +90,7 @@ public class ElasticSearchIndex extends ElasticSearchConnection
     
     public IndexRequestEntity(RepositoryDocument document, InputStream inputStream,
       String[] acls, String[] denyAcls, String[] shareAcls, String[] shareDenyAcls, String[] parentAcls, String[] parentDenyAcls,
+      String[] authorities,
       boolean useIngesterAttachment,
       boolean useMapperAttachments,
       String contentAttributeName,
@@ -108,6 +110,7 @@ public class ElasticSearchIndex extends ElasticSearchConnection
       this.shareDenyAcls = shareDenyAcls;
       this.parentAcls = parentAcls;
       this.parentDenyAcls = parentDenyAcls;
+      this.authorities = authorities;
       this.useIngesterAttachment = useIngesterAttachment;
       this.useMapperAttachments = useMapperAttachments;
       this.contentAttributeName = contentAttributeName;
@@ -196,6 +199,11 @@ public class ElasticSearchIndex extends ElasticSearchConnection
         needComma = writeACLs(pw, needComma, "document", acls, denyAcls);
         needComma = writeACLs(pw, needComma, "share", shareAcls, shareDenyAcls);
         needComma = writeACLs(pw, needComma, "parent", parentAcls, parentDenyAcls);
+
+        // Write expanded authorities field (users who have access based on ACL group expansion)
+        if (authorities != null && authorities.length > 0) {
+          needComma = writeField(pw, needComma, "authorities", authorities);
+        }
 
         if (useIngesterAttachment && inputStream != null) {
           if (contentAttributeName != null)
@@ -448,6 +456,7 @@ public class ElasticSearchIndex extends ElasticSearchConnection
   public boolean execute(String documentURI, RepositoryDocument document, 
     InputStream inputStream,
     String[] acls, String[] denyAcls, String[] shareAcls, String[] shareDenyAcls, String[] parentAcls, String[] parentDenyAcls,
+    String[] authorities,
     String fullDocumentURI)
     throws ManifoldCFException, ServiceInterruption
   {
@@ -460,6 +469,7 @@ public class ElasticSearchIndex extends ElasticSearchConnection
     Logging.connectors.debug("HttPutUri: " + url.toString());
     put.setEntity(new IndexRequestEntity(document, inputStream,
       acls, denyAcls, shareAcls, shareDenyAcls, parentAcls, parentDenyAcls,
+      authorities,
       config.getUseIngestAttachment(),
       config.getUseMapperAttachments(),
       config.getContentAttributeName(),

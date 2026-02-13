@@ -2,6 +2,7 @@
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchConnector.java
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchConfig.java
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchConnection.java
+/Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchAuthoritiesExpander.java
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchParam.java
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchAction.java
 /Users/kumarsaikat/code/AI/work/spring-ai-alibaba-saikat/manifoldcf-saikat/connectors/elasticsearch/connector/src/main/java/org/apache/manifoldcf/agents/output/elasticsearch/ElasticSearchIndex.java

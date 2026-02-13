@@ -153,6 +153,9 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
   protected static final long timeToRelease = 300000L;
   protected long lastSessionFetch = -1L;
 
+  /** Max file size in bytes. Files exceeding this are skipped. 0 = no limit. */
+  protected long maxFileSizeBytes = 0L;
+
   // Group membership syncer: resolves group members via vendor REST API
   // and indexes them in the manifoldcf_acl OpenSearch index during crawl.
   // At query time, the search service looks up the user's groups from this
@@ -425,6 +428,18 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     binding = params.getParameter(CmisConfig.BINDING_PARAM);
     if (StringUtils.isNotEmpty(params.getParameter(CmisConfig.REPOSITORY_ID_PARAM)))
       repositoryId = params.getParameter(CmisConfig.REPOSITORY_ID_PARAM);
+
+    // Max file size limit (bytes). 0 or empty = no limit.
+    String maxFileSizeStr = params.getParameter(CmisConfig.MAX_FILE_SIZE_PARAM);
+    if (StringUtils.isNotEmpty(maxFileSizeStr)) {
+      try {
+        maxFileSizeBytes = Long.parseLong(maxFileSizeStr);
+      } catch (NumberFormatException e) {
+        maxFileSizeBytes = 0L;
+      }
+    } else {
+      maxFileSizeBytes = 0L;
+    }
   }
 
   /** Test the connection.  Returns a string describing the connection integrity.
@@ -539,8 +554,11 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       String vendorVal = params.getParameter(CmisConfig.VENDOR_PARAM);
       String gApiUrl = params.getParameter(CmisConfig.GROUP_API_URL_PARAM);
       String gMembersApiUrl = params.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
+      // Use server name as the repository connection identifier for index naming
+      // This produces index names like: manifold_alfresco_demo_crestsolution_com_authorities
+      String repoConnectionName = server;
       groupSyncer = new CmisGroupMembershipSyncer(protocol, server, port, username, password,
-          vendorVal, gApiUrl, gMembersApiUrl);
+          vendorVal, gApiUrl, gMembersApiUrl, repoConnectionName);
     }
   }
 
@@ -748,6 +766,17 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       for (CmisObject cmisObject : cmisObjects) {
           activities.addSeedDocument(cmisObject.getId());
       	}
+    } else if (cmisQuery.contains("__AUTHORITIES_SYNC__")) {
+      // Special marker: proactively sync ALL groups into the authorities index
+      // without crawling any documents. Used by the dedicated authorities sync job.
+      if (groupSyncer != null) {
+        Logging.connectors.info("CMIS: Detected __AUTHORITIES_SYNC__ marker — running full group sync");
+        groupSyncer.syncAllGroups();
+      } else {
+        Logging.connectors.warn("CMIS: __AUTHORITIES_SYNC__ marker found but group syncer is not enabled. "
+            + "Ensure vendor, group API URL, and group members API URL are configured.");
+      }
+      // Return without adding any seed documents — the job completes after syncing
     } else {
       cmisQuery = CmisRepositoryConnectorUtils.getCmisQueryWithObjectId(cmisQuery);
       // Use automatic pagination (default page size ~100) instead of
@@ -834,6 +863,7 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     String groupApiUrl = parameters.getParameter(CmisConfig.GROUP_API_URL_PARAM);
     String groupMembersApiUrl = parameters.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
     String groupApiTestResult = parameters.getParameter(CmisConfig.GROUP_API_TEST_RESULT_PARAM);
+    String skipAclWait = parameters.getParameter(CmisConfig.SKIP_ACL_WAIT_PARAM);
 
     if(cmisVendor == null)
       cmisVendor = CmisConfig.VENDOR_DEFAULT_VALUE;
@@ -843,6 +873,8 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       groupMembersApiUrl = CmisConfig.GROUP_MEMBERS_API_URL_DEFAULT_VALUE;
     if(groupApiTestResult == null)
       groupApiTestResult = StringUtils.EMPTY;
+    if(skipAclWait == null)
+      skipAclWait = CmisConfig.SKIP_ACL_WAIT_DEFAULT_VALUE;
 
     newMap.put(CmisConfig.USERNAME_PARAM, username);
     newMap.put(CmisConfig.PASSWORD_PARAM, password);
@@ -856,6 +888,7 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     newMap.put(CmisConfig.GROUP_API_URL_PARAM, groupApiUrl);
     newMap.put(CmisConfig.GROUP_MEMBERS_API_URL_PARAM, groupMembersApiUrl);
     newMap.put(CmisConfig.GROUP_API_TEST_RESULT_PARAM, groupApiTestResult);
+    newMap.put(CmisConfig.SKIP_ACL_WAIT_PARAM, skipAclWait);
   }
 
   /**
@@ -1015,6 +1048,19 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
     String groupMembersApiUrl = variableContext.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
     if (groupMembersApiUrl != null) {
       parameters.setParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM, groupMembersApiUrl);
+    }
+
+    // Skip ACL wait checkbox — unchecked checkboxes don't send a value, so absence means "false"
+    String skipAclWait = variableContext.getParameter(CmisConfig.SKIP_ACL_WAIT_PARAM);
+    if (skipAclWait != null) {
+      parameters.setParameter(CmisConfig.SKIP_ACL_WAIT_PARAM, skipAclWait);
+    } else {
+      // Checkbox was present (on the Server tab) but unchecked
+      // Use the binding param already read above as a proxy for "Server tab was active"
+      if (binding != null) {
+        // Server tab was active, so checkbox absence means false
+        parameters.setParameter(CmisConfig.SKIP_ACL_WAIT_PARAM, "false");
+      }
     }
 
     // Test Group API if requested
@@ -1302,6 +1348,17 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
               activities.noDocument(documentIdentifier,versionString);
               errorCode = IProcessActivity.EXCLUDED_MIMETYPE;
               errorDesc = "Excluding due to mime type ("+mimeType+")";
+              continue;
+            }
+
+            // Enforce max file size limit from connector configuration
+            if (maxFileSizeBytes > 0 && fileLength > maxFileSizeBytes)
+            {
+              activities.noDocument(documentIdentifier,versionString);
+              errorCode = IProcessActivity.EXCLUDED_LENGTH;
+              errorDesc = "Excluding due to max file size limit: " + fileLength + " bytes > " + maxFileSizeBytes + " bytes (" + (maxFileSizeBytes / (1024*1024)) + " MB) — file: " + fileName;
+              if (Logging.connectors.isInfoEnabled())
+                Logging.connectors.info("CMIS: Skipping document '" + fileName + "' (" + fileLength + " bytes) — exceeds maxFileSize (" + maxFileSizeBytes + " bytes)");
               continue;
             }
 

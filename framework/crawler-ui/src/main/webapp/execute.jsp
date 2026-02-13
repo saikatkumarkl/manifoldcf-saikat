@@ -1617,6 +1617,30 @@
 <%
         }
       }
+      else if (op.equals("Start"))
+      {
+        // -- Start a job from the job list page --
+        try
+        {
+          String jobID = variableContext.getParameter("jobid");
+          if (jobID == null)
+            throw new ManifoldCFException("Missing job parameter");
+          manager.manualStart(new Long(jobID),false);
+          // Forward to showjobstatus so user can see the running job
+%>
+          <jsp:forward page="showjobstatus.jsp"/>
+<%
+        }
+        catch (ManifoldCFException e)
+        {
+          e.printStackTrace();
+          variableContext.setParameter("text",e.getMessage());
+          variableContext.setParameter("target","listjobs.jsp");
+%>
+          <jsp:forward page="error.jsp"/>
+<%
+        }
+      }
       else if (op.equals("Cancel"))
       {
         // Cancel operation

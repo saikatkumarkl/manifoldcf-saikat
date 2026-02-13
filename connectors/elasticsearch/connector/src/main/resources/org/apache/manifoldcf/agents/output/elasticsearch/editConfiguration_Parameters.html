@@ -85,6 +85,16 @@
     <td class="value"><input name="mimetypeattributename" type="text" value="$Encoder.attributeEscape($MIMETYPEATTRIBUTENAME)"
       size="24" /></td>
   </tr>
+  <tr>
+    <td class="separator" colspan="2"><hr /></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('ElasticSearchConnector.AuthoritiesIndexNameColon'))</nobr></td>
+    <td class="value">
+      <input name="authoritiesindexname" type="text" value="$Encoder.attributeEscape($AUTHORITIESINDEXNAME)" size="40" />
+      <br/><small>$Encoder.bodyEscape($ResourceBundle.getString('ElasticSearchConnector.AuthoritiesIndexNameHint'))</small>
+    </td>
+  </tr>
 
 </table>
 
@@ -104,5 +114,6 @@
 <input type="hidden" name="modifieddateattributename" value="$Encoder.attributeEscape($MODIFIEDDATEATTRIBUTENAME)" />
 <input type="hidden" name="indexingdateattributename" value="$Encoder.attributeEscape($INDEXINGDATEATTRIBUTENAME)" />
 <input type="hidden" name="mimetypeattributename" value="$Encoder.attributeEscape($MIMETYPEATTRIBUTENAME)" />
+<input type="hidden" name="authoritiesindexname" value="$Encoder.attributeEscape($AUTHORITIESINDEXNAME)" />
 
 #end
