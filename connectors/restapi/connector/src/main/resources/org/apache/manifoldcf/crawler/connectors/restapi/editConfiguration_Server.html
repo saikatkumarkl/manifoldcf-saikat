@@ -1,0 +1,328 @@
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+#if($TABNAME == $ResourceBundle.getString('RestApiRepositoryConnector.Server'))
+
+<input type="hidden" name="_testConnection" value="" />
+
+<table class="displaytable">
+
+  <!-- ═══════════════════════ Vendor Preset ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/></td></tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.VendorColon'))</nobr></td>
+    <td class="value">
+      <select name="VENDOR" onchange="applyVendorPreset()">
+        <option value="confluence" #if($VENDOR == 'confluence')selected="selected"#end>Confluence (Atlassian)</option>
+        <option value="jira" #if($VENDOR == 'jira')selected="selected"#end>Jira (Atlassian)</option>
+        <option value="wordpress" #if($VENDOR == 'wordpress')selected="selected"#end>WordPress</option>
+        <option value="github" #if($VENDOR == 'github')selected="selected"#end>GitHub</option>
+        <option value="sharepoint" #if($VENDOR == 'sharepoint')selected="selected"#end>SharePoint Online</option>
+        <option value="notion" #if($VENDOR == 'notion')selected="selected"#end>Notion</option>
+        <option value="drupal" #if($VENDOR == 'drupal')selected="selected"#end>Drupal</option>
+        <option value="alfresco" #if($VENDOR == 'alfresco')selected="selected"#end>Alfresco (REST API)</option>
+        <option value="other" #if($VENDOR == 'other')selected="selected"#end>Other (Custom REST API)</option>
+      </select>
+      &nbsp;<em>Select a vendor to auto-populate endpoint configuration</em>
+    </td>
+  </tr>
+
+  <!-- ═══════════════════════ Connection Settings ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ConnectionSettings'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ProtocolColon'))</nobr></td>
+    <td class="value">
+      <select name="PROTOCOL">
+        <option value="https" #if($PROTOCOL == 'https')selected="selected"#end>https</option>
+        <option value="http" #if($PROTOCOL == 'http')selected="selected"#end>http</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ServerColon'))</nobr></td>
+    <td class="value"><input type="text" size="60" name="SERVER" value="$Encoder.attributeEscape($SERVER)" /></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PortColon'))</nobr></td>
+    <td class="value"><input type="text" size="8" name="PORT" value="$Encoder.attributeEscape($PORT)" /></td>
+  </tr>
+
+  <!-- ═══════════════════════ Authentication ═══════════════════════ -->
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AuthTypeColon'))</nobr></td>
+    <td class="value">
+      <select name="AUTHTYPE" onchange="updateAuthFields()">
+        <option value="basic" #if($AUTHTYPE == 'basic')selected="selected"#end>Basic Auth</option>
+        <option value="bearer" #if($AUTHTYPE == 'bearer')selected="selected"#end>Bearer Token</option>
+        <option value="apikey" #if($AUTHTYPE == 'apikey')selected="selected"#end>API Key</option>
+        <option value="none" #if($AUTHTYPE == 'none')selected="selected"#end>No Auth</option>
+      </select>
+    </td>
+  </tr>
+
+  <tbody id="basicAuthFields" #if($AUTHTYPE != 'basic')style="display:none"#end>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.UsernameColon'))</nobr></td>
+      <td class="value"><input type="text" size="40" name="USERNAME" value="$Encoder.attributeEscape($USERNAME)" /></td>
+    </tr>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PasswordColon'))</nobr></td>
+      <td class="value"><input type="password" size="40" name="PASSWORD" value="$Encoder.attributeEscape($PASSWORD)" /></td>
+    </tr>
+  </tbody>
+
+  <tbody id="tokenAuthFields" #if($AUTHTYPE != 'bearer' && $AUTHTYPE != 'apikey')style="display:none"#end>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ApiKeyColon'))</nobr></td>
+      <td class="value"><input type="password" size="60" name="APIKEY" value="$Encoder.attributeEscape($APIKEY)" /></td>
+    </tr>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ApiKeyHeaderColon'))</nobr></td>
+      <td class="value"><input type="text" size="30" name="APIKEYHEADER" value="$Encoder.attributeEscape($APIKEYHEADER)" /> <em>(default: Authorization)</em></td>
+    </tr>
+  </tbody>
+
+  <!-- ═══════════════════════ Endpoint Configuration ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.EndpointConfiguration'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.BasePathColon'))</nobr></td>
+    <td class="value"><input type="text" size="60" name="BASEPATH" value="$Encoder.attributeEscape($BASEPATH)" /> <em>(e.g., /api/v1)</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.SeedEndpointColon'))</nobr></td>
+    <td class="value"><input type="text" size="80" name="SEEDENDPOINT" value="$Encoder.attributeEscape($SEEDENDPOINT)" /></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.DocEndpointColon'))</nobr></td>
+    <td class="value"><input type="text" size="80" name="DOCENDPOINT" value="$Encoder.attributeEscape($DOCENDPOINT)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.UseIdPlaceholder'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ContentEndpointColon'))</nobr></td>
+    <td class="value"><input type="text" size="80" name="CONTENTENDPOINT" value="$Encoder.attributeEscape($CONTENTENDPOINT)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AclEndpointColon'))</nobr></td>
+    <td class="value"><input type="text" size="80" name="ACLENDPOINT" value="$Encoder.attributeEscape($ACLENDPOINT)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+
+  <!-- ═══════════════════════ Pagination Settings ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PaginationSettings'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PaginationTypeColon'))</nobr></td>
+    <td class="value">
+      <select name="PAGINATIONTYPE" onchange="updatePaginationFields()">
+        <option value="offset" #if($PAGINATIONTYPE == 'offset')selected="selected"#end>Offset / Limit</option>
+        <option value="page" #if($PAGINATIONTYPE == 'page')selected="selected"#end>Page Number</option>
+        <option value="cursor" #if($PAGINATIONTYPE == 'cursor')selected="selected"#end>Cursor / Token</option>
+        <option value="link" #if($PAGINATIONTYPE == 'link')selected="selected"#end>Next Link URL</option>
+        <option value="none" #if($PAGINATIONTYPE == 'none')selected="selected"#end>No Pagination</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PageSizeColon'))</nobr></td>
+    <td class="value"><input type="text" size="8" name="PAGESIZE" value="$Encoder.attributeEscape($PAGESIZE)" /></td>
+  </tr>
+
+  <tbody id="offsetPaginationFields" #if($PAGINATIONTYPE != 'offset')style="display:none"#end>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.OffsetParamColon'))</nobr></td>
+      <td class="value"><input type="text" size="20" name="OFFSETPARAM" value="$Encoder.attributeEscape($OFFSETPARAM)" /></td>
+    </tr>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.LimitParamColon'))</nobr></td>
+      <td class="value"><input type="text" size="20" name="LIMITPARAM" value="$Encoder.attributeEscape($LIMITPARAM)" /></td>
+    </tr>
+  </tbody>
+
+  <tbody id="pagePaginationFields" #if($PAGINATIONTYPE != 'page')style="display:none"#end>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.PageParamColon'))</nobr></td>
+      <td class="value"><input type="text" size="20" name="PAGEPARAM" value="$Encoder.attributeEscape($PAGEPARAM)" /></td>
+    </tr>
+  </tbody>
+
+  <tbody id="cursorPaginationFields" #if($PAGINATIONTYPE != 'cursor' && $PAGINATIONTYPE != 'link')style="display:none"#end>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.CursorFieldColon'))</nobr></td>
+      <td class="value"><input type="text" size="40" name="CURSORFIELD" value="$Encoder.attributeEscape($CURSORFIELD)" /> <em>(JSONPath in response)</em></td>
+    </tr>
+    <tr>
+      <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.CursorParamColon'))</nobr></td>
+      <td class="value"><input type="text" size="20" name="CURSORPARAM" value="$Encoder.attributeEscape($CURSORPARAM)" /> <em>(query param name)</em></td>
+    </tr>
+  </tbody>
+
+  <!-- ═══════════════════════ Response Field Mapping ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ResponseMapping'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ItemsPathColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="ITEMSPATH" value="$Encoder.attributeEscape($ITEMSPATH)" /> <em>(e.g., $.results, $.data)</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.IdFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="IDFIELD" value="$Encoder.attributeEscape($IDFIELD)" /></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.TitleFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="TITLEFIELD" value="$Encoder.attributeEscape($TITLEFIELD)" /></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ContentFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="CONTENTFIELD" value="$Encoder.attributeEscape($CONTENTFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.MimeTypeFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="MIMETYPEFIELD" value="$Encoder.attributeEscape($MIMETYPEFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.CreatedDateFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="CREATEDDATEFIELD" value="$Encoder.attributeEscape($CREATEDDATEFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ModifiedDateFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="MODIFIEDDATEFIELD" value="$Encoder.attributeEscape($MODIFIEDDATEFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.SizeFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="SIZEFIELD" value="$Encoder.attributeEscape($SIZEFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.DownloadUrlFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="DOWNLOADURLFIELD" value="$Encoder.attributeEscape($DOWNLOADURLFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+
+  <!-- ═══════════════════════ ACL Configuration ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AclConfiguration'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AclAllowFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="ACLALLOWFIELD" value="$Encoder.attributeEscape($ACLALLOWFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AclDenyFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="ACLDENYFIELD" value="$Encoder.attributeEscape($ACLDENYFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AclPrincipalFieldColon'))</nobr></td>
+    <td class="value"><input type="text" size="40" name="ACLPRINCIPALFIELD" value="$Encoder.attributeEscape($ACLPRINCIPALFIELD)" /> <em>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.Optional'))</em></td>
+  </tr>
+
+  <!-- ═══════════════════════ Advanced Settings ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/><b>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.AdvancedSettings'))</b></td></tr>
+
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.MaxFileSizeColon'))</nobr></td>
+    <td class="value"><input type="text" size="15" name="MAXFILESIZE" value="$Encoder.attributeEscape($MAXFILESIZE)" /> <em>(0 = no limit)</em></td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.ResponseTypeColon'))</nobr></td>
+    <td class="value">
+      <select name="RESPONSETYPE">
+        <option value="json" #if($RESPONSETYPE == 'json')selected="selected"#end>JSON</option>
+        <option value="xml" #if($RESPONSETYPE == 'xml')selected="selected"#end>XML</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="description"><nobr>$Encoder.bodyEscape($ResourceBundle.getString('RestApiRepositoryConnector.CustomHeadersColon'))</nobr></td>
+    <td class="value"><textarea rows="3" cols="60" name="CUSTOMHEADERS">$Encoder.bodyEscape($CUSTOMHEADERS)</textarea> <em>(key=value, one per line)</em></td>
+  </tr>
+
+  <!-- ═══════════════════════ Test Connection ═══════════════════════ -->
+  <tr><td class="separator" colspan="2"><hr/></td></tr>
+  <tr>
+    <td class="description">&nbsp;</td>
+    <td class="value">
+      <input type="button" value="$Encoder.attributeEscape($ResourceBundle.getString('RestApiRepositoryConnector.TestConnection'))" onclick="doTestConnection()" style="font-weight:bold;padding:5px 20px;" />
+      &nbsp;<em>Tests seed endpoint, document detail, content, and ACL retrieval</em>
+    </td>
+  </tr>
+
+  #if($TESTRESULT != '')
+  <tr>
+    <td class="description">&nbsp;</td>
+    <td class="value">
+      #if($TESTRESULT.startsWith('PASS|'))
+        <div style="background:#d4edda;border:1px solid #c3e6cb;padding:12px;border-radius:4px;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#155724;">
+          <div style="font-size:14px;font-weight:bold;margin-bottom:8px;">&#x2705; Connection Test PASSED</div>$Encoder.bodyEscape($TESTRESULT.substring(5))</div>
+      #elseif($TESTRESULT.startsWith('WARN|'))
+        <div style="background:#fff3cd;border:1px solid #ffeeba;padding:12px;border-radius:4px;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#856404;">
+          <div style="font-size:14px;font-weight:bold;margin-bottom:8px;">&#x26A0;&#xFE0F; Connection Test — Warnings</div>$Encoder.bodyEscape($TESTRESULT.substring(5))</div>
+      #elseif($TESTRESULT.startsWith('FAIL|'))
+        <div style="background:#f8d7da;border:1px solid #f5c6cb;padding:12px;border-radius:4px;white-space:pre-wrap;font-family:monospace;font-size:12px;color:#721c24;">
+          <div style="font-size:14px;font-weight:bold;margin-bottom:8px;">&#x274C; Connection Test FAILED</div>$Encoder.bodyEscape($TESTRESULT.substring(5))</div>
+      #else
+        <div style="background:#e2e3e5;border:1px solid #d6d8db;padding:12px;border-radius:4px;white-space:pre-wrap;font-family:monospace;font-size:12px;">$Encoder.bodyEscape($TESTRESULT)</div>
+      #end
+    </td>
+  </tr>
+  #end
+
+</table>
+
+<script type="text/javascript">
+  // Initialize visibility on page load
+  if (typeof updateAuthFields === 'function') updateAuthFields();
+  if (typeof updatePaginationFields === 'function') updatePaginationFields();
+</script>
+
+#else
+
+<!-- Hidden fields when tab is not selected -->
+<input type="hidden" name="VENDOR" value="$Encoder.attributeEscape($VENDOR)" />
+<input type="hidden" name="AUTHTYPE" value="$Encoder.attributeEscape($AUTHTYPE)" />
+<input type="hidden" name="USERNAME" value="$Encoder.attributeEscape($USERNAME)" />
+<input type="hidden" name="PASSWORD" value="$Encoder.attributeEscape($PASSWORD)" />
+<input type="hidden" name="APIKEY" value="$Encoder.attributeEscape($APIKEY)" />
+<input type="hidden" name="APIKEYHEADER" value="$Encoder.attributeEscape($APIKEYHEADER)" />
+<input type="hidden" name="PROTOCOL" value="$Encoder.attributeEscape($PROTOCOL)" />
+<input type="hidden" name="SERVER" value="$Encoder.attributeEscape($SERVER)" />
+<input type="hidden" name="PORT" value="$Encoder.attributeEscape($PORT)" />
+<input type="hidden" name="BASEPATH" value="$Encoder.attributeEscape($BASEPATH)" />
+<input type="hidden" name="SEEDENDPOINT" value="$Encoder.attributeEscape($SEEDENDPOINT)" />
+<input type="hidden" name="DOCENDPOINT" value="$Encoder.attributeEscape($DOCENDPOINT)" />
+<input type="hidden" name="CONTENTENDPOINT" value="$Encoder.attributeEscape($CONTENTENDPOINT)" />
+<input type="hidden" name="ACLENDPOINT" value="$Encoder.attributeEscape($ACLENDPOINT)" />
+<input type="hidden" name="PAGINATIONTYPE" value="$Encoder.attributeEscape($PAGINATIONTYPE)" />
+<input type="hidden" name="PAGESIZE" value="$Encoder.attributeEscape($PAGESIZE)" />
+<input type="hidden" name="OFFSETPARAM" value="$Encoder.attributeEscape($OFFSETPARAM)" />
+<input type="hidden" name="LIMITPARAM" value="$Encoder.attributeEscape($LIMITPARAM)" />
+<input type="hidden" name="PAGEPARAM" value="$Encoder.attributeEscape($PAGEPARAM)" />
+<input type="hidden" name="CURSORFIELD" value="$Encoder.attributeEscape($CURSORFIELD)" />
+<input type="hidden" name="CURSORPARAM" value="$Encoder.attributeEscape($CURSORPARAM)" />
+<input type="hidden" name="ITEMSPATH" value="$Encoder.attributeEscape($ITEMSPATH)" />
+<input type="hidden" name="IDFIELD" value="$Encoder.attributeEscape($IDFIELD)" />
+<input type="hidden" name="TITLEFIELD" value="$Encoder.attributeEscape($TITLEFIELD)" />
+<input type="hidden" name="CONTENTFIELD" value="$Encoder.attributeEscape($CONTENTFIELD)" />
+<input type="hidden" name="MIMETYPEFIELD" value="$Encoder.attributeEscape($MIMETYPEFIELD)" />
+<input type="hidden" name="CREATEDDATEFIELD" value="$Encoder.attributeEscape($CREATEDDATEFIELD)" />
+<input type="hidden" name="MODIFIEDDATEFIELD" value="$Encoder.attributeEscape($MODIFIEDDATEFIELD)" />
+<input type="hidden" name="SIZEFIELD" value="$Encoder.attributeEscape($SIZEFIELD)" />
+<input type="hidden" name="DOWNLOADURLFIELD" value="$Encoder.attributeEscape($DOWNLOADURLFIELD)" />
+<input type="hidden" name="ACLALLOWFIELD" value="$Encoder.attributeEscape($ACLALLOWFIELD)" />
+<input type="hidden" name="ACLDENYFIELD" value="$Encoder.attributeEscape($ACLDENYFIELD)" />
+<input type="hidden" name="ACLPRINCIPALFIELD" value="$Encoder.attributeEscape($ACLPRINCIPALFIELD)" />
+<input type="hidden" name="MAXFILESIZE" value="$Encoder.attributeEscape($MAXFILESIZE)" />
+<input type="hidden" name="CUSTOMHEADERS" value="$Encoder.attributeEscape($CUSTOMHEADERS)" />
+<input type="hidden" name="RESPONSETYPE" value="$Encoder.attributeEscape($RESPONSETYPE)" />
+
+#end

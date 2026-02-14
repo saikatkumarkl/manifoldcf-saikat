@@ -82,6 +82,7 @@
     <module>csws</module>
     <module>csv</module>
     <module>newgeneric</module>
+    <module>restapi</module>
   </modules>
 
 </project>

@@ -94,6 +94,7 @@
   <repositoryconnector name="Confluence" class="org.apache.manifoldcf.crawler.connectors.confluence.ConfluenceRepositoryConnector"/>
   <repositoryconnector name="Confluence v6+" class="org.apache.manifoldcf.crawler.connectors.confluence.v6.ConfluenceRepositoryConnector"/>
   <repositoryconnector name="CMIS" class="org.apache.manifoldcf.crawler.connectors.cmis.CmisRepositoryConnector"/>
+  <repositoryconnector name="REST API" class="org.apache.manifoldcf.crawler.connectors.restapi.RestApiRepositoryConnector"/>
   <repositoryconnector name="AmazonS3" class="org.apache.manifoldcf.crawler.connectors.amazons3.AmazonS3Connector"/>
   <repositoryconnector name="Alfresco Webscript" class="org.apache.manifoldcf.crawler.connectors.alfrescowebscript.AlfrescoConnector"/>
 

@@ -118,6 +118,11 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>mcf-restapi-connector</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>mcf-solr-connector</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -578,7 +583,7 @@
                 mcf-csws-connector,mcf-slack-connector,mcf-rocketchat-connector,mcf-opennlp-connector,
                 mcf-html-extractor-connector,mcf-forcedmetadata-connector,mcf-documentfilter-connector,
                 mcf-contentlimiter-connector,mcf-nulltransformation-connector,mcf-regexpmapper-connector,
-                mcf-ldapmapper-connector,mcf-newgeneric-connector
+                mcf-ldapmapper-connector,mcf-newgeneric-connector,mcf-restapi-connector
               </includeArtifactIds>
               <excludeTypes>war,pom</excludeTypes>
             </configuration>
