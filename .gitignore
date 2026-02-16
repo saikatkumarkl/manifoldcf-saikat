@@ -16,3 +16,4 @@ target/
 
 # Site fonts
 site/fonts/
+/distribution/target

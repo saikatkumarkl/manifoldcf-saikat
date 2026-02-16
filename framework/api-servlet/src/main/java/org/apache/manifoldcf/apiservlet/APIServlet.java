@@ -61,10 +61,32 @@ public class APIServlet extends HttpServlet
     Object x = request.getSession().getAttribute("apiprofile");
     if (x == null || !(x instanceof APIProfile))
     {
-      // Basic login
+      // Try HTTP Basic Auth header first, fall back to empty credentials
+      String userName = "";
+      String password = "";
+      String authHeader = request.getHeader("Authorization");
+      if (authHeader != null && authHeader.startsWith("Basic "))
+      {
+        try
+        {
+          String decoded = new String(
+            java.util.Base64.getDecoder().decode(authHeader.substring(6).trim()),
+            StandardCharsets.UTF_8);
+          int colonIndex = decoded.indexOf(':');
+          if (colonIndex >= 0)
+          {
+            userName = decoded.substring(0, colonIndex);
+            password = decoded.substring(colonIndex + 1);
+          }
+        }
+        catch (Exception e)
+        {
+          // Malformed header — fall through with empty credentials
+        }
+      }
       APIProfile ap = new APIProfile();
       request.getSession().setAttribute("apiprofile",ap);
-      ap.login(tc,"","");
+      ap.login(tc, userName, password);
       return ap;
     }
     return (APIProfile)x;

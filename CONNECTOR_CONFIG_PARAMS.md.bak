@@ -1,0 +1,444 @@
+# ManifoldCF Repository Connector Configuration Parameters
+
+> Auto-generated reference of ALL configuration parameters for each repository connector.
+> Source: `manifoldcf-saikat/connectors/*/connector/src/main/java/`
+
+---
+
+## 1. CMIS
+
+**Config class:** `CmisConfig.java` in `connectors/cmis/connector/src/main/java/.../cmis/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `USERNAME_PARAM` | `username` | CMIS username | `dummyuser` | Yes |
+| `PASSWORD_PARAM` | `password` | CMIS password | `dummysecrect` | Yes |
+| `PROTOCOL_PARAM` | `protocol` | Connection protocol (http/https) | `http` | Yes |
+| `SERVER_PARAM` | `server` | CMIS server hostname | `localhost` | Yes |
+| `PORT_PARAM` | `port` | Server port | `9090` | Yes |
+| `PATH_PARAM` | `path` | AtomPub API context path | `/chemistry-opencmis-server-inmemory/atom` | Yes |
+| `REPOSITORY_ID_PARAM` | `repositoryId` | CMIS Repository ID | `""` (empty) | Optional |
+| `BINDING_PARAM` | `binding` | Protocol binding: `atom`, `ws`, `browser` | `atom` | Yes |
+| `CMIS_QUERY_PARAM` | `cmisQuery` | CMIS query (job specification) | — | Optional |
+| `VENDOR_PARAM` | `cmisVendor` | CMIS vendor selection (alfresco, other, etc.) | `other` | Optional |
+| `GROUP_API_URL_PARAM` | `groupApiUrl` | Group List API URL path (deprecated) | `""` | Optional |
+| `GROUP_MEMBERS_API_URL_PARAM` | `groupMembersApiUrl` | Group Members API URL template (deprecated) | `""` | Optional |
+| `GROUP_API_TEST_RESULT_PARAM` | `groupApiTestResult` | Transient test result (not persisted) | — | Optional |
+| `SKIP_ACL_WAIT_PARAM` | `skipAclWait` | Skip ACL wait before indexing | `false` | Optional |
+| `MAX_FILE_SIZE_PARAM` | `maxFileSize` | Max file size in bytes (0 = no limit) | `0` | Optional |
+
+---
+
+## 2. Amazon S3
+
+**Config class:** `AmazonS3Config.java` in `connectors/amazons3/connector/src/main/java/.../amazons3/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `AWS_ACCESS_KEY` | `aws_access_key` | AWS Access Key ID | `""` | Yes |
+| `AWS_SECRET_KEY` | `aws_secret_key` | AWS Secret Access Key | `""` | Yes |
+| `AMAZONS3_HOST` | `amazons3_host` | S3 endpoint host (blank for default AWS) | `""` | Optional |
+| `AMAZONS3_PORT` | `amazons3_port` | S3 endpoint port | `""` | Optional |
+| `AMAZONS3_PROTOCOL` | `amazons3_protocol` | Protocol (http/https) | `http` | Optional |
+| `AMAZONS3_PROXY_HOST` | `amazons3_proxy_host` | Proxy hostname | `""` | Optional |
+| `AMAZONS3_PROXY_PORT` | `amazons3_proxy_port` | Proxy port | `""` | Optional |
+| `AMAZONS3_PROXY_DOMAIN` | `amazons3_proxy_domain` | Proxy domain | `""` | Optional |
+| `AMAZONS3_PROXY_USERNAME` | `amazons3_proxy_username` | Proxy username | `""` | Optional |
+| `AMAZONS3_PROXY_PASSWORD` | `amazons3_proxy_password` | Proxy password | `""` | Optional |
+
+**Job specification params:**
+
+| Constant Name | Param String | Description |
+|---|---|---|
+| `JOB_BUCKETS_ATTRIBUTE` | `s3buckets` | Comma-separated S3 bucket names to crawl |
+
+---
+
+## 3. Confluence (v4/v5)
+
+**Config class:** `ConfluenceConfiguration.java` in `connectors/confluence/connector/src/main/java/.../confluence/`
+
+All params are in the `Server` inner interface:
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `Server.USERNAME` | `username` | Confluence username | `""` | Yes |
+| `Server.PASSWORD` | `password` | Confluence password | `""` | Yes |
+| `Server.PROTOCOL` | `protocol` | Protocol (http/https) | `http` | Yes |
+| `Server.HOST` | `host` | Server hostname | `""` | Yes |
+| `Server.PORT` | `port` | Server port | `8090` | Yes |
+| `Server.PATH` | `path` | Context path | `/confluence` | Yes |
+
+**Job specification params** (`Specification` interface):
+
+| Constant Name | Param String | Description |
+|---|---|---|
+| `Specification.SPACES` | `spaces` | Spaces container node |
+| `Specification.SPACE` | `space` | Single space node |
+| `Specification.SPACE_KEY_ATTRIBUTE` | `key` | Space key attribute |
+| `Specification.PAGES` | `pages` | Pages filter node |
+| `Specification.PROCESS_ATTACHMENTS_ATTRIBUTE_KEY` | `process_attachments` | Whether to process attachments |
+| `Specification.PAGETYPE` | `pagetype` | Page type filter |
+
+---
+
+## 4. Confluence v6
+
+**Config class:** `ConfluenceConfiguration.java` in `connectors/confluence-v6/connector/src/main/java/.../confluence/v6/`
+
+**Server params** (`Server` interface):
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `Server.USERNAME` | `username` | Confluence username | `""` | Yes |
+| `Server.PASSWORD` | `password` | Confluence password | `""` | Yes |
+| `Server.PROTOCOL` | `protocol` | Protocol (http/https) | `http` | Yes |
+| `Server.HOST` | `host` | Server hostname | `""` | Yes |
+| `Server.PORT` | `port` | Server port | `8090` | Yes |
+| `Server.PATH` | `path` | Context path | `/confluence` | Yes |
+| `Server.SOCKET_TIMEOUT` | `socket_timeout` | Socket timeout (ms) | `900000` | Optional |
+| `Server.CONNECTION_TIMEOUT` | `connection_timeout` | Connection timeout (ms) | `60000` | Optional |
+| `Server.RETRY_NUMBER` | `retryNumber` | Number of retry attempts | `2` | Optional |
+| `Server.RETRY_INTERVAL` | `retryInterval` | Interval between retries (ms) | `20000` | Optional |
+| `Server.PROXY_USERNAME` | `proxy_username` | Proxy username | `""` | Optional |
+| `Server.PROXY_PASSWORD` | `proxy_password` | Proxy password | `""` | Optional |
+| `Server.PROXY_PROTOCOL` | `proxy_protocol` | Proxy protocol | `http` | Optional |
+| `Server.PROXY_HOST` | `proxy_host` | Proxy hostname | `""` | Optional |
+| `Server.PROXY_PORT` | `proxy_port` | Proxy port | `""` | Optional |
+
+**Authority params** (`Authority` interface):
+
+| Constant Name | Param String | Description |
+|---|---|---|
+| `Authority.CACHE_LIFETIME` | `cache_lifetime` | Authority cache lifetime |
+| `Authority.CACHE_LRU_SIZE` | `cache_lru_size` | Authority cache LRU size |
+
+**Job specification params** (`Specification` interface):
+
+| Constant Name | Param String | Description |
+|---|---|---|
+| `Specification.SPACES` | `spaces` | Spaces container node |
+| `Specification.SPACE` | `space` | Single space node |
+| `Specification.SPACE_KEY_ATTRIBUTE` | `key` | Space key attribute |
+| `Specification.PAGES` | `pages` | Pages filter node |
+| `Specification.SECURITY` | `security` | Security node |
+| `Specification.ACTIVATE_SECURITY_ATTRIBUTE_KEY` | `activate_security` | Enable security/ACL extraction |
+| `Specification.PROCESS_ATTACHMENTS_ATTRIBUTE_KEY` | `process_attachments` | Whether to process attachments |
+| `Specification.PAGETYPE` | `pagetype` | Page type filter |
+
+---
+
+## 5. Email
+
+**Config class:** `EmailConfig.java` in `connectors/email/connector/src/main/java/.../email/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `USERNAME_PARAM` | `username` | Email account username | — | Yes |
+| `PASSWORD_PARAM` | `password` | Email account password | — | Yes |
+| `PROTOCOL_PARAM` | `protocol` | Protocol: `IMAP`, `IMAP-SSL`, `POP3`, `POP3-SSL` | `IMAP` | Yes |
+| `SERVER_PARAM` | `server` | Mail server hostname | — | Yes |
+| `PORT_PARAM` | `port` | Mail server port | `""` | Optional |
+| `URL_PARAM` | `url` | URL template for email messages | — | Optional |
+| `ATTACHMENT_URL_PARAM` | `attachmenturl` | Attachment URL template | — | Optional |
+
+**Job specification nodes:**
+
+| Constant Name | Value | Description |
+|---|---|---|
+| `NODE_PROPERTIES` | `properties` | Properties node |
+| `NODE_METADATA` | `metadata` | Metadata node |
+| `NODE_EXTRACT_EMAIL` | `extractemail` | Extract email content |
+| `NODE_FILTER` | `filter` | Filter node |
+| `NODE_FOLDER` | `folder` | Folder to crawl |
+
+---
+
+## 6. Jira
+
+**Config class:** `JiraConfig.java` in `connectors/jira/connector/src/main/java/.../jira/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `CLIENT_ID_PARAM` | `clientid` | Jira username / Client ID | `""` | Yes |
+| `CLIENT_SECRET_PARAM` | `clientsecret` | Jira password / Client Secret | `""` | Yes |
+| `JIRA_PROTOCOL_PARAM` | `jiraprotocol` | Protocol (http/https) | `http` | Yes |
+| `JIRA_HOST_PARAM` | `jirahost` | Jira server hostname | `""` | Yes |
+| `JIRA_PORT_PARAM` | `jiraport` | Jira server port | `""` | Optional |
+| `JIRA_PATH_PARAM` | `jirapath` | REST API path | `/rest/api/2/` | Yes |
+| `JIRA_PROXYHOST_PARAM` | `jiraproxyhost` | Proxy hostname | `""` | Optional |
+| `JIRA_PROXYPORT_PARAM` | `jiraproxyport` | Proxy port | `""` | Optional |
+| `JIRA_PROXYDOMAIN_PARAM` | `jiraproxydomain` | Proxy domain | `""` | Optional |
+| `JIRA_PROXYUSERNAME_PARAM` | `jiraproxyusername` | Proxy username | `""` | Optional |
+| `JIRA_PROXYPASSWORD_PARAM` | `jiraproxypassword` | Proxy password | `""` | Optional |
+| `JIRA_QUERY_PARAM` | `jiraquery` | JQL query for job specification | `ORDER BY createdDate Asc` | Optional |
+
+---
+
+## 7. JDBC
+
+**Config class:** `JDBCConstants.java` in `connectors/jdbc/connector/src/main/java/.../jdbc/`
+
+| Constant Name | Param String | Description | Required |
+|---|---|---|---|
+| `providerParameter` | `JDBC Provider` | JDBC provider type (oracle, postgresql, mysql, mssql, etc.) | Yes |
+| `methodParameter` | `JDBC column access method` | Column interrogation method (name or label) | Yes |
+| `hostParameter` | `Host` | Database host machine | Yes |
+| `databaseNameParameter` | `Database name` | Database name | Yes |
+| `driverStringParameter` | `Raw driver string` | Raw JDBC connection string (overrides host/db) | Optional |
+| `databaseUserName` | `User name` | Database username | Yes |
+| `databasePassword` | `Password` | Database password (obfuscated) | Yes |
+
+**Job specification nodes:**
+
+| Constant Name | Value | Description |
+|---|---|---|
+| `idQueryNode` | `idquery` | SQL query returning document identifiers |
+| `versionQueryNode` | `versionquery` | SQL query returning document versions |
+| `dataQueryNode` | `dataquery` | SQL query returning document content |
+| `aclQueryNode` | `aclquery` | SQL query returning ACL tokens |
+| `attributeQueryNode` | `attrquery` | SQL query returning metadata attributes |
+
+**SQL return column/variable conventions:**
+
+| Column Name | Description |
+|---|---|
+| `lcf__id` | Document ID column |
+| `lcf__version` | Document version column |
+| `lcf__url` | Document URL column |
+| `lcf__data` | Document data/content column |
+| `lcf__contenttype` | Content MIME type column |
+| `lcf__token` | ACL token column |
+
+---
+
+## 8. Dropbox
+
+**Config class:** `DropboxConfig.java` in `connectors/dropbox/connector/src/main/java/.../dropbox/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `KEY_PARAM` | `key` | OAuth access key / token | — | Yes |
+| `SECRET_PARAM` | `secret` | OAuth access secret | — | Yes |
+| `APP_KEY_PARAM` | `app_key` | Dropbox App Key | — | Yes |
+| `APP_SECRET_PARAM` | `app_secret` | Dropbox App Secret | — | Yes |
+| `DROPBOX_PATH_PARAM` | `dropboxpath` | Root path to crawl | `/` | Optional |
+
+---
+
+## 9. Google Drive
+
+**Config class:** `GoogleDriveConfig.java` in `connectors/googledrive/connector/src/main/java/.../googledrive/`
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `CLIENT_ID_PARAM` | `clientid` | OAuth2 Client ID | — | Yes |
+| `CLIENT_SECRET_PARAM` | `clientsecret` | OAuth2 Client Secret | — | Yes |
+| `REFRESH_TOKEN_PARAM` | `refreshtoken` | OAuth2 Refresh Token | — | Yes |
+| `GOOGLEDRIVE_QUERY_PARAM` | `googledriveQuery` | Google Drive query (job spec) | `mimeType='application/vnd.google-apps.folder' and trashed=false` | Optional |
+
+---
+
+## 10. SharePoint
+
+**Config class:** `SharePointConfig.java` in `connectors/sharepoint/connector/src/main/java/.../sharepoint/`
+
+| Constant Name | Param String | Description | Required |
+|---|---|---|---|
+| `PARAM_SERVERVERSION` | `serverVersion` | SharePoint version (2.0, 3.0, 4.0) | Yes |
+| `PARAM_SERVERPROTOCOL` | `serverProtocol` | Protocol (http/https) | Yes |
+| `PARAM_SERVERNAME` | `serverName` | SharePoint server hostname | Yes |
+| `PARAM_SERVERPORT` | `serverPort` | Server port | Yes |
+| `PARAM_SERVERLOCATION` | `serverLocation` | Site collection path (e.g., `/sites/mysite`) | Yes |
+| `PARAM_SERVERUSERNAME` | `userName` | Authentication username | Yes |
+| `PARAM_SERVERPASSWORD` | `password` | Authentication password | Yes |
+| `PARAM_SERVERKEYSTORE` | `keystore` | SSL certificate keystore | Optional |
+| `PARAM_PROXYHOST` | `proxyHost` | Proxy hostname | Optional |
+| `PARAM_PROXYPORT` | `proxyPort` | Proxy port | Optional |
+| `PARAM_PROXYUSER` | `proxyUser` | Proxy username | Optional |
+| `PARAM_PROXYPASSWORD` | `proxyPassword` | Proxy password | Optional |
+| `PARAM_PROXYDOMAIN` | `proxyDomain` | Proxy auth domain | Optional |
+| `PARAM_AUTHORITYTYPE` | `authorityType` | Authority type | Optional |
+
+---
+
+## 11. Web Crawler
+
+**Config class:** `WebcrawlerConfig.java` in `connectors/webcrawler/connector/src/main/java/.../webcrawler/`
+
+### Connection-level parameters (stored in `configParams`):
+
+| Constant Name | Param String | Description | Required |
+|---|---|---|---|
+| `PARAMETER_ROBOTSUSAGE` | `Robots usage` | How to handle robots.txt (all/none/web) | Yes |
+| `PARAMETER_META_ROBOTS_TAGS_USAGE` | `Meta robots tags usage` | How to handle `<meta>` robots tags | Optional |
+| `PARAMETER_EMAIL` | `Email address` | Contact email for the crawler | Yes |
+| `PARAMETER_PROXYHOST` | `Proxy host` | HTTP proxy hostname | Optional |
+| `PARAMETER_PROXYPORT` | `Proxy port` | HTTP proxy port | Optional |
+| `PARAMETER_PROXYAUTHDOMAIN` | `Proxy authentication domain` | Proxy auth domain | Optional |
+| `PARAMETER_PROXYAUTHUSERNAME` | `Proxy authentication user name` | Proxy auth username | Optional |
+| `PARAMETER_PROXYAUTHPASSWORD` | `Proxy authentication password` | Proxy auth password | Optional |
+| `PARAMETER_USER_AGENT_PLATFORM` | `User-Agent platform` | User-Agent string platform (mobile support) | Optional |
+
+### Connection-level structured nodes:
+
+| Node Constant | Node Name | Attributes | Description |
+|---|---|---|---|
+| `NODE_BINDESC` | `bindesc` | `binregexp`, `caseinsensitive` | Bin description for throttling |
+| `NODE_MAXCONNECTIONS` | `maxconnections` | `value` | Max concurrent connections per bin |
+| `NODE_MAXKBPERSECOND` | `maxkbpersecond` | `value` | Bandwidth limit per bin |
+| `NODE_MAXFETCHESPERMINUTE` | `maxfetchesperminute` | `value` | Max fetch rate per bin |
+| `NODE_ACCESSCREDENTIAL` | `accesscredential` | `urlregexp`, `type` (basic/ntlm/session), `domain`, `username`, `password` | Authentication credentials |
+| `NODE_AUTHPAGE` | `authpage` | `urlregexp`, `type` (form/link/redirection/content), `match`, `overridetargeturl` | Session auth page definitions |
+| `NODE_AUTHPARAMETER` | `authparameter` | `name`, `value` | Auth form parameters |
+| `NODE_TRUST` | `trust` | `urlregexp`, `truststore`, `trusteverything` | SSL trust configuration |
+
+### Job specification nodes:
+
+| Node Constant | Node Name | Description |
+|---|---|---|
+| `NODE_SEEDS` | `seeds` | Seed URLs (text block) |
+| `NODE_INCLUDES` | `includes` | Include URL regexps for crawling |
+| `NODE_EXCLUDES` | `excludes` | Exclude URL regexps from crawling |
+| `NODE_INCLUDESINDEX` | `includesindex` | Include URL regexps for indexing |
+| `NODE_EXCLUDESINDEX` | `excludesindex` | Exclude URL regexps from indexing |
+| `NODE_EXCLUDESCONTENTINDEX` | `excludescontentindex` | Exclude pages by body content regex |
+| `NODE_LIMITTOSEEDS` | `limittoseeds` | Limit crawling to seed domains only |
+| `NODE_FORCEINCLUSION` | `forceinclusionofredirects` | Force include redirected URLs |
+| `NODE_URLSPEC` | `urlspec` | URL canonicalization rules |
+| `NODE_ACCESS` | `access` | Forced ACL access tokens |
+| `NODE_EXCLUDEHEADER` | `excludeheader` | Exclude specific HTTP headers from metadata |
+| `NODE_MAP` | `map` | URL-to-URI mapping rules |
+
+---
+
+## 12. File System
+
+**Connector class:** `FileConnector.java` in `connectors/filesystem/connector/src/main/java/.../filesystem/`
+
+The File System **repository** connector has **NO connection-level configuration parameters**. It accesses the local filesystem directly.
+
+### Job specification parameters (variableContext):
+
+| Parameter | Description |
+|---|---|
+| `specpath` | Root path to crawl |
+| `converttouri` | Convert file paths to URIs |
+| `specflavor` | Include/exclude |
+| `spectype` | File or directory |
+| `specmatch` | Filename match pattern |
+
+**Note:** The **File System Output** connector (`FileOutputConnector`) has one config parameter:
+
+| Enum Name | Param String | Description | Default |
+|---|---|---|---|
+| `ROOTPATH` | `ROOTPATH` | Root directory for output files | `""` |
+
+---
+
+## 13. REST API (Custom Connector)
+
+**Config class:** `RestApiConfig.java` in `connectors/restapi/connector/src/main/java/.../restapi/`
+
+### Connection-level parameters:
+
+| Constant Name | Param String | Description | Default | Required |
+|---|---|---|---|---|
+| `VENDOR_PARAM` | `VENDOR` | Vendor preset (confluence, jira, wordpress, github, sharepoint, notion, drupal, alfresco, other) | `other` | Yes |
+| `AUTH_TYPE_PARAM` | `AUTHTYPE` | Auth type: basic, bearer, apikey, oauth2, none | `basic` | Yes |
+| `USERNAME_PARAM` | `USERNAME` | Username (Basic auth) | — | Conditional |
+| `PASSWORD_PARAM` | `PASSWORD` | Password (Basic auth) | — | Conditional |
+| `API_KEY_PARAM` | `APIKEY` | Bearer token / API key value | — | Conditional |
+| `API_KEY_HEADER_PARAM` | `APIKEYHEADER` | API key header name | `Authorization` | Optional |
+| `PROTOCOL_PARAM` | `PROTOCOL` | Protocol (http/https) | `https` | Yes |
+| `SERVER_PARAM` | `SERVER` | Server hostname | — | Yes |
+| `PORT_PARAM` | `PORT` | Server port | `443` | Yes |
+| `BASE_PATH_PARAM` | `BASEPATH` | Base path prefix (e.g., /api/v1) | — | Optional |
+| `SEED_ENDPOINT_PARAM` | `SEEDENDPOINT` | Listing endpoint path | — | Yes |
+| `DOC_ENDPOINT_PARAM` | `DOCENDPOINT` | Document detail endpoint (use `{id}`) | — | Optional |
+| `CONTENT_ENDPOINT_PARAM` | `CONTENTENDPOINT` | Binary content endpoint (use `{id}`) | — | Optional |
+| `ACL_ENDPOINT_PARAM` | `ACLENDPOINT` | ACL/permissions endpoint (use `{id}`) | — | Optional |
+
+### Pagination parameters:
+
+| Constant Name | Param String | Description | Default |
+|---|---|---|---|
+| `PAGINATION_TYPE_PARAM` | `PAGINATIONTYPE` | Pagination type: offset, page, cursor, link, none | `offset` |
+| `PAGE_SIZE_PARAM` | `PAGESIZE` | Page size / limit per request | `100` |
+| `OFFSET_PARAM_NAME` | `OFFSETPARAM` | Query param name for offset | `offset` |
+| `LIMIT_PARAM_NAME` | `LIMITPARAM` | Query param name for limit | `limit` |
+| `PAGE_PARAM_NAME` | `PAGEPARAM` | Query param name for page number | `page` |
+| `CURSOR_FIELD_PARAM` | `CURSORFIELD` | JSONPath to cursor/next token in response | — |
+| `CURSOR_PARAM_NAME` | `CURSORPARAM` | Query param name to send cursor value | — |
+
+### Response mapping (JSONPath expressions):
+
+| Constant Name | Param String | Description | Default |
+|---|---|---|---|
+| `ITEMS_PATH_PARAM` | `ITEMSPATH` | JSONPath to items array | `$.results` |
+| `ID_FIELD_PARAM` | `IDFIELD` | JSONPath to document ID | `$.id` |
+| `TITLE_FIELD_PARAM` | `TITLEFIELD` | JSONPath to title/name | `$.name` |
+| `CONTENT_FIELD_PARAM` | `CONTENTFIELD` | JSONPath to content/body | `$.content` |
+| `MIMETYPE_FIELD_PARAM` | `MIMETYPEFIELD` | JSONPath to MIME type | `$.mimeType` |
+| `CREATED_DATE_FIELD_PARAM` | `CREATEDDATEFIELD` | JSONPath to created date | `$.createdDate` |
+| `MODIFIED_DATE_FIELD_PARAM` | `MODIFIEDDATEFIELD` | JSONPath to modified date | `$.modifiedDate` |
+| `SIZE_FIELD_PARAM` | `SIZEFIELD` | JSONPath to file size | `$.size` |
+| `DOWNLOAD_URL_FIELD_PARAM` | `DOWNLOADURLFIELD` | JSONPath to download URL | — |
+
+### ACL mapping:
+
+| Constant Name | Param String | Description |
+|---|---|---|
+| `ACL_ALLOW_FIELD_PARAM` | `ACLALLOWFIELD` | JSONPath to allow principals array |
+| `ACL_DENY_FIELD_PARAM` | `ACLDENYFIELD` | JSONPath to deny principals array |
+| `ACL_PRINCIPAL_FIELD_PARAM` | `ACLPRINCIPALFIELD` | JSONPath to principal ID within ACL entry |
+
+### Miscellaneous:
+
+| Constant Name | Param String | Description | Default |
+|---|---|---|---|
+| `MAX_FILE_SIZE_PARAM` | `MAXFILESIZE` | Max file size in bytes (0 = no limit) | — |
+| `CUSTOM_HEADERS_PARAM` | `CUSTOMHEADERS` | Custom HTTP headers (key=value, newline-separated) | — |
+| `RESPONSE_TYPE_PARAM` | `RESPONSETYPE` | Response content type: json, xml | `json` |
+| `QUERY_PARAM` | `RESTAPIQUERY` | Custom query/filter (job specification) | — |
+
+### Vendor presets available:
+
+| Vendor ID | Label | Pre-fills |
+|---|---|---|
+| `confluence` | Confluence (Atlassian) | Confluence Cloud REST API v2 paths, cursor pagination |
+| `jira` | Jira (Atlassian) | Jira REST API v3 paths, offset pagination |
+| `wordpress` | WordPress | WordPress REST API v2 paths, page pagination |
+| `github` | GitHub | GitHub REST API paths, bearer auth, page pagination |
+| `sharepoint` | SharePoint Online | SharePoint REST API paths, bearer auth, link pagination |
+| `notion` | Notion | Notion API paths, bearer auth, cursor pagination |
+| `drupal` | Drupal | Drupal JSON:API paths, cursor pagination |
+| `alfresco` | Alfresco (REST API) | Alfresco REST API paths, offset pagination |
+| `other` | Other (Custom REST API) | All fields blank for manual entry |
+
+---
+
+## Quick Reference: API Parameter Names for Programmatic Connection Creation
+
+When creating connections via the ManifoldCF REST API (`/mcf-api-service/json/repositoryconnections/`), parameter names must match the **Param String** column exactly (case-sensitive). Example JSON for CMIS:
+
+```json
+{
+  "repositoryconnection": {
+    "name": "My CMIS Connection",
+    "class_name": "org.apache.manifoldcf.crawler.connectors.cmis.CmisRepositoryConnector",
+    "configuration": {
+      "parameter": [
+        { "_attribute_name": "username", "__value__": "admin" },
+        { "_attribute_name": "password", "__value__": "admin" },
+        { "_attribute_name": "protocol", "__value__": "https" },
+        { "_attribute_name": "server", "__value__": "alfresco.example.com" },
+        { "_attribute_name": "port", "__value__": "443" },
+        { "_attribute_name": "path", "__value__": "/alfresco/api/-default-/cmis/versions/1.1/atom" },
+        { "_attribute_name": "binding", "__value__": "atom" },
+        { "_attribute_name": "repositoryId", "__value__": "-default-" }
+      ]
+    }
+  }
+}
+```
