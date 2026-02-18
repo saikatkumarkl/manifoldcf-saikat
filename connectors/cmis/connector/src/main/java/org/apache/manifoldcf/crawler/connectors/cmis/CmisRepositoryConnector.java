@@ -554,11 +554,11 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       String vendorVal = params.getParameter(CmisConfig.VENDOR_PARAM);
       String gApiUrl = params.getParameter(CmisConfig.GROUP_API_URL_PARAM);
       String gMembersApiUrl = params.getParameter(CmisConfig.GROUP_MEMBERS_API_URL_PARAM);
-      // Use server name as the repository connection identifier for index naming
-      // This produces index names like: manifold_alfresco_demo_crestsolution_com_authorities
-      String repoConnectionName = server;
+      // Authority index name must be explicitly provided by the admin app.
+      // If not set, group syncing is disabled — no auto-generated "manifold_*" names.
+      String authorityIndexName = params.getParameter(CmisConfig.AUTHORITY_INDEX_NAME_PARAM);
       groupSyncer = new CmisGroupMembershipSyncer(protocol, server, port, username, password,
-          vendorVal, gApiUrl, gMembersApiUrl, repoConnectionName);
+          vendorVal, gApiUrl, gMembersApiUrl, authorityIndexName);
     }
   }
 
@@ -1637,6 +1637,10 @@ public class CmisRepositoryConnector extends BaseRepositoryConnector {
       	} else {
       		documentURI = documentDownloadURL + "?" +CONTENT_PATH_PARAM+"=" + fullContentPath;
       	}
+			} else {
+				// Unfiled document (no parent folder) — use objectId as URI
+				// to avoid empty document IDs that cause HTTP 405 on PUT
+				documentURI = cmisObject.getId();
 			}
   	} else if(StringUtils.equals(currentBaseTypeId, BaseTypeId.CMIS_FOLDER.value())) {
   		Folder currentFolder = (Folder) cmisObject;

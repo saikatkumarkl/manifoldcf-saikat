@@ -119,6 +119,18 @@ public class ElasticSearchConnector extends BaseOutputConnector
   public void connect(ConfigParams configParams)
   {
     super.connect(configParams);
+    // Validate index name: reject auto-generated "manifold_*" names.
+    // Index names must be provided by the admin app (e.g., "{kbId}_document").
+    ElasticSearchConfig cfg = new ElasticSearchConfig(configParams);
+    String idx = cfg.getIndexName();
+    if (idx != null) {
+      String lower = idx.toLowerCase();
+      if (lower.startsWith("manifold_") || lower.startsWith("manifoldcf")) {
+        Logging.connectors.warn("ElasticSearch output: Rejected index name '" + idx
+            + "' — names starting with 'manifold_' or 'manifoldcf' are not allowed. "
+            + "Index names must be provided by the admin app.");
+      }
+    }
   }
   
   protected HttpClient getSession()
@@ -407,6 +419,22 @@ public class ElasticSearchConnector extends BaseOutputConnector
     String compressedDocumentURI = compressDocumentURI(documentURI);
     HttpClient client = getSession();
     ElasticSearchConfig config = getConfigParameters(null);
+
+    // Hard-reject documents if the index name starts with "manifold_" or "manifoldcf".
+    // Index names must be provided by the admin app, not auto-generated.
+    String targetIndex = config.getIndexName();
+    if (targetIndex != null) {
+      String lower = targetIndex.toLowerCase();
+      if (lower.startsWith("manifold_") || lower.startsWith("manifoldcf")) {
+        Logging.connectors.warn("ElasticSearch output: REJECTED document '" + documentURI
+            + "' — target index '" + targetIndex + "' uses a forbidden 'manifold_' prefix. "
+            + "Index names must be provided by the admin app.");
+        activities.recordActivity(null, ELASTICSEARCH_INDEXATION_ACTIVITY,
+            document.getBinaryLength(), documentURI, "REJECTED",
+            "Index name '" + targetIndex + "' not allowed: 'manifold_' prefix is reserved");
+        return DOCUMENTSTATUS_REJECTED;
+      }
+    }
 
     InputStream inputStream = document.getBinaryStream();
     // For ES, we have to have fixed fields only; nothing else is possible b/c we don't have

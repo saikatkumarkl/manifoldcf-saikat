@@ -79,8 +79,6 @@ import org.apache.manifoldcf.crawler.system.Logging;
  */
 public class CmisGroupMembershipSyncer {
 
-  /** Default authorities index name (used when no repo connection name is provided) */
-  private static final String DEFAULT_AUTHORITIES_INDEX = "manifoldcf_authorities";
   private static final int MAX_RECURSION_DEPTH = 5;
   private static final int HTTP_CONNECT_TIMEOUT = 15000;
   private static final int HTTP_READ_TIMEOUT = 30000;
@@ -97,7 +95,7 @@ public class CmisGroupMembershipSyncer {
   /** Configured group members API path template with {groupId} placeholder */
   private final String groupMembersApiPath;
 
-  /** Dynamic authorities index name: manifold_{repoName}_authorities */
+  /** Authorities index name — must be provided by the admin app, not auto-generated */
   private final String authoritiesIndex;
 
   /** OpenSearch base URL, e.g. http://localhost:9200 */
@@ -134,14 +132,23 @@ public class CmisGroupMembershipSyncer {
   public CmisGroupMembershipSyncer(String protocol, String server, String port,
                                     String username, String password,
                                     String vendor, String groupApiPath, String groupMembersApiPath,
-                                    String repoConnectionName) {
+                                    String authorityIndexName) {
     this.baseUrl = protocol + "://" + server + ":" + port;
 
-    // Derive authorities index name from repo connection name
-    if (repoConnectionName != null && !repoConnectionName.isEmpty()) {
-      this.authoritiesIndex = "manifold_" + sanitizeIndexName(repoConnectionName) + "_authorities";
+    // Authority index name MUST be provided by the admin app.
+    // No auto-generated "manifold_*" names — only admin-app-provided names are allowed.
+    if (authorityIndexName != null && !authorityIndexName.isEmpty()) {
+      // Reject any index name starting with "manifold_" — these are legacy auto-generated names
+      if (authorityIndexName.toLowerCase().startsWith("manifold_") || authorityIndexName.toLowerCase().startsWith("manifoldcf")) {
+        Logging.connectors.warn("CMIS GroupSync: Rejected authority index name '" + authorityIndexName
+            + "' — names starting with 'manifold_' or 'manifoldcf' are not allowed. "
+            + "Index names must be provided by the admin app.");
+        this.authoritiesIndex = null;
+      } else {
+        this.authoritiesIndex = authorityIndexName;
+      }
     } else {
-      this.authoritiesIndex = DEFAULT_AUTHORITIES_INDEX;
+      this.authoritiesIndex = null;
     }
     this.vendor = (vendor != null && !vendor.isEmpty()) ? vendor : "other";
 
@@ -171,10 +178,14 @@ public class CmisGroupMembershipSyncer {
     this.basicAuthHeader = "Basic " + Base64.getEncoder()
         .encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
 
-    // Enable/disable via environment, also disable if no API paths configured
+    // Enable/disable via environment, also disable if no API paths or authority index configured
     String enabledStr = System.getenv("MCF_GROUP_SYNC_ENABLED");
     if ("false".equalsIgnoreCase(enabledStr)) {
       this.enabled = false;
+    } else if (this.authoritiesIndex == null) {
+      this.enabled = false;
+      Logging.connectors.info("CMIS GroupSync: Disabled — no authority index name provided by admin app. "
+          + "Group syncing only works when the admin app provides an explicit index name.");
     } else if (this.groupApiPath.isEmpty() || this.groupMembersApiPath.isEmpty()) {
       this.enabled = false;
       Logging.connectors.info("CMIS GroupSync: Disabled — group API paths not configured");
@@ -203,7 +214,7 @@ public class CmisGroupMembershipSyncer {
 
   /**
    * Get the authorities index name for this repository connection.
-   * @return index name like "manifold_alfresco_cmis_authorities"
+   * @return index name provided by the admin app, or null if not configured
    */
   public String getAuthoritiesIndexName() {
     return authoritiesIndex;

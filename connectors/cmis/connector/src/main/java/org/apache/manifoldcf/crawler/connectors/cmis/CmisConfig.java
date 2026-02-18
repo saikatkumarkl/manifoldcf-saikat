@@ -84,6 +84,12 @@ public class CmisConfig {
    *  Set to 0 or empty to disable the limit (index all files regardless of size). */
   public static final String MAX_FILE_SIZE_PARAM = "maxFileSize";
 
+  /** Authority index name — the OpenSearch index where group membership data is stored.
+   *  Must be provided by the admin app (e.g. "{kbId}_authority").
+   *  If empty or not set, group membership syncing is disabled.
+   *  This prevents auto-generated "manifold_*" index names. */
+  public static final String AUTHORITY_INDEX_NAME_PARAM = "authorityIndexName";
+
   // Default values for new params
   public static final String VENDOR_DEFAULT_VALUE = "other";
   public static final String GROUP_API_URL_DEFAULT_VALUE = "";
@@ -91,5 +97,7 @@ public class CmisConfig {
   public static final String SKIP_ACL_WAIT_DEFAULT_VALUE = "false";
   /** Default: 0 = no limit */
   public static final String MAX_FILE_SIZE_DEFAULT_VALUE = "0";
+  /** Default: empty = group syncing disabled (must be explicitly set by admin app) */
+  public static final String AUTHORITY_INDEX_NAME_DEFAULT_VALUE = "";
   
 }

@@ -27,7 +27,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -65,6 +67,53 @@ public class ElasticSearchIndex extends ElasticSearchConnection
   /** Flag set as to whether null_value works in ES.  Right now it doesn't work,
   * so we have to do everything in the connector. */
   protected final static boolean useNullValue = false;
+
+  /**
+   * Metadata fields from CMIS/Tika that add index bloat without downstream value.
+   * These are skipped during writeTo() to reduce document size in OpenSearch.
+   * <ul>
+   *   <li>Content-Encoding, Content-Type, X-Parsed-By — Tika internals</li>
+   *   <li>alfcmis:nodeRef — Alfresco internal reference</li>
+   *   <li>cmis:baseTypeId, cmis:objectTypeId, cmis:secondaryObjectTypeIds — always the same</li>
+   *   <li>cmis:contentStreamId — internal stream identifier</li>
+   *   <li>cmis:is* — boolean version metadata rarely needed</li>
+   *   <li>cmis:versionLabel, cmis:versionSeriesId — version tracking</li>
+   *   <li>cmis:lastModifiedBy — duplicated by last-modified date</li>
+   *   <li>resourceName, stream_name, stream_size — Tika duplicates of cmis:contentStream*</li>
+   * </ul>
+   */
+  protected final static Set<String> SKIP_METADATA_FIELDS;
+  static {
+    Set<String> s = new HashSet<>();
+    // Tika internals
+    s.add("Content-Encoding");
+    s.add("Content-Type");
+    s.add("X-Parsed-By");
+    // Alfresco-specific
+    s.add("alfcmis:nodeRef");
+    // CMIS type metadata (constant per object type)
+    s.add("cmis:baseTypeId");
+    s.add("cmis:objectTypeId");
+    s.add("cmis:secondaryObjectTypeIds");
+    // CMIS internal stream ID
+    s.add("cmis:contentStreamId");
+    // CMIS boolean version flags
+    s.add("cmis:isImmutable");
+    s.add("cmis:isLatestMajorVersion");
+    s.add("cmis:isLatestVersion");
+    s.add("cmis:isMajorVersion");
+    s.add("cmis:isPrivateWorkingCopy");
+    s.add("cmis:isVersionSeriesCheckedOut");
+    // CMIS version tracking
+    s.add("cmis:versionLabel");
+    s.add("cmis:versionSeriesId");
+    s.add("cmis:lastModifiedBy");
+    // Tika duplicates of cmis:contentStreamFileName / cmis:contentStreamLength
+    s.add("resourceName");
+    s.add("stream_name");
+    s.add("stream_size");
+    SKIP_METADATA_FIELDS = java.util.Collections.unmodifiableSet(s);
+  }
   
   private class IndexRequestEntity implements HttpEntity
   {
@@ -157,10 +206,33 @@ public class ElasticSearchIndex extends ElasticSearchConnection
       try
       {
         pw.print("{");
+        // Collect standard field names that will be written separately below.
+        // Skip these during metadata iteration to prevent duplicate JSON fields
+        // (e.g. CMIS/Tika both produce 'created' which collides with createdDateAttributeName).
+        Set<String> reservedFieldNames = new HashSet<>();
+        if (fullUriAttributeName != null && fullUriAttributeName.length() > 0)
+          reservedFieldNames.add(fullUriAttributeName);
+        if (createdDateAttributeName != null && createdDateAttributeName.length() > 0)
+          reservedFieldNames.add(createdDateAttributeName);
+        if (modifiedDateAttributeName != null && modifiedDateAttributeName.length() > 0)
+          reservedFieldNames.add(modifiedDateAttributeName);
+        if (indexingDateAttributeName != null && indexingDateAttributeName.length() > 0)
+          reservedFieldNames.add(indexingDateAttributeName);
+        if (mimeTypeAttributeName != null && mimeTypeAttributeName.length() > 0)
+          reservedFieldNames.add(mimeTypeAttributeName);
+        if (contentAttributeName != null && contentAttributeName.length() > 0)
+          reservedFieldNames.add(contentAttributeName);
+
         Iterator<String> i = document.getFields();
         boolean needComma = false;
         while (i.hasNext()){
           String fieldName = i.next();
+          if (reservedFieldNames.contains(fieldName)) {
+            continue; // Skip — will be written as a standard field below
+          }
+          if (SKIP_METADATA_FIELDS.contains(fieldName)) {
+            continue; // B1: Drop unused CMIS/Tika metadata to reduce index bloat
+          }
           Date[] dateFieldValues = document.getFieldAsDates(fieldName);
           if (dateFieldValues != null)
           {
